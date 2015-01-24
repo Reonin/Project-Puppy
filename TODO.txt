@@ -1,0 +1,8 @@
+TODO list of things still left to do update accordingly either here or through email
+
+//Tweak the size of the spotlight/torch lighting effect
+
+//Add tiling system in
+
+//Add collision events for players and the tiles
+
