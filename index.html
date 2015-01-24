@@ -18,16 +18,6 @@
 </head>
 
 <body>
-    <div id="text-shadow-box">
-<!-- to disable shadows comment out this -->
-    <div id="tsb-box"></div>
-    <p id="tsb-text"></p> 
-    </div>
-     <div id="tsb-spot"></div>
-
-<!-- to this and comment out the initShadows() function call -->
-
-
 	<style>
     html {
         width: 100%;
@@ -48,98 +38,6 @@
         display: block;
         border: none;
 	}
- #text-shadow-box {
-    position: fixed;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background: url('') no-repeat center top #444;
-   
-    font-family: Helvetica, Arial, sans-serif;
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
-    -webkit-user-select: none;
-}
-
-#text-shadow-box #tsb-text,
-#text-shadow-box #tsb-link {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    height: 1em;
-    margin: -0.77em 0 0 0;
-    font-size: 90px;
-    line-height: 1em;
-    font-weight: bold;
-    text-align: center;
-}
-
-#text-shadow-box #tsb-text {
-    font-size: 100px;
-    color: transparent;
-    text-shadow: black 0px -45.2px 19px; 
-}
-
-#text-shadow-box #tsb-link a {
-    color: #999;
-    text-decoration: none;
-}
-
-#text-shadow-box #tsb-box,
-#text-shadow-box #tsb-wall {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    height: 60%;
-}
-
-#text-shadow-box #tsb-box {
-    -webkit-box-shadow: black 0px -45.2px 39px;
-    -moz-box-shadow: black 0px -45.2px 39px;
-}
-
-#text-shadow-box #tsb-wall {
-    background: #999;
-}
-
-#text-shadow-box #tsb-wall p {
-    position: relative;
-    font-size: 18px;
-    line-height: 1.5em;
-    text-align: justify;
-    color: #222;
-    width: 550px;
-    margin: 1.5em auto;
-    cursor: default;
-}
-
-#text-shadow-box #tsb-wall p a {
-    color: #fff;
-}
-
-#text-shadow-box #tsb-wall p a:hover {
-    text-decoration: none;
-    color: #000;
-    background: #fff;
-}
-
-#tsb-spot {
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    pointer-events: none;
-    background: -webkit-gradient(radial, center center, 0, center center, 450, from(rgba(0,0,0,0)), to(rgba(0,0,0,1)));
-    background: -moz-radial-gradient(center 45deg, circle closest-side, transparent 0, black 450px);
-}
-
-
 	</style>
 <script>
 //Generate the Canvas
@@ -149,7 +47,6 @@ var CANVAS_HEIGHT = 1080;
 
 var canvasElement = $("<canvas id ='GameCanvasScreen' width='" + CANVAS_WIDTH + "' height='" + CANVAS_HEIGHT + "'></canvas>");
 var canvas = canvasElement.get(0).getContext("2d");
-canvasElement.appendTo('#text-shadow-box');
 
 function scaleToSmallest() {
     var ratio = CANVAS_WIDTH / CANVAS_HEIGHT;
@@ -280,6 +177,7 @@ var player = {
     width: 32,
     height: 32,
     life: 100,
+    lightRadius: 40,
     draw: function() {
         //canvas.fillStyle = this.color;
         // canvas.fillRect(this.x, this.y, this.width, this.height);
@@ -332,6 +230,7 @@ var player2 = {
     width: 32,
     height: 32,
     life: 100,
+    lightRadius: 40,
     draw: function() {
         //canvas.fillStyle = this.color;
         // canvas.fillRect(this.x, this.y, this.width, this.height);
@@ -557,28 +456,6 @@ var spot = null;
 var box = null;
 var boxProperty = '';
 
-
-
-function initShadows() {
-    text = document.getElementById('tsb-text');
-    spot = document.getElementById('tsb-spot');
-    box = document.getElementById('tsb-box');
-    
-    if (typeof box.style.webkitBoxShadow == 'string') {
-        boxProperty = 'webkitBoxShadow';
-    } else if (typeof box.style.MozBoxShadow == 'string') {
-        boxProperty = 'MozBoxShadow';
-    } else if (typeof box.style.boxShadow == 'string') {
-        boxProperty = 'boxShadow';
-    }
-
-    if (text && spot && box) {
-        document.getElementById('text-shadow-box').onmousemove = onMouseMove;
-        document.getElementById('text-shadow-box').ontouchmove = function (e) {e.preventDefault(); e.stopPropagation(); onMouseMove({clientX: e.touches[0].clientX, clientY: e.touches[0].clientY});};
-    }
-}
-
-
 function onMouseMove(e) {
     if (typeof e === 'undefined' || typeof e.clientX === 'undefined') {
         return;
@@ -598,11 +475,6 @@ function onMouseMove(e) {
     spot.style.backgroundPosition = xm + 'px ' + ym + 'px';
     //console.log('the mouse is at ' + xm + 'and' + ym);
 }
-
-
-
-//generate shadows
-         initShadows();
 
 function controller(){
      //Pause the game
@@ -786,6 +658,34 @@ function draw() { //Draws objects to the canvas
 
     if (currentState === states.Game) {
         parallax.Draw(); //draw background
+
+        // Draw the shadow above the background but below the players and UI elements
+        // Create a canvas for the mask
+        var shadowCanvas = document.createElement('canvas');
+
+        // Set it to the size of the main canvas
+        shadowCanvas.width = canvasElement.get(0).width;
+        shadowCanvas.height = canvasElement.get(0).height;
+        var shadowCanvasCtx = shadowCanvas.getContext('2d');
+        // Fill the mask with black
+        shadowCanvasCtx.fillStyle = "black";
+        shadowCanvasCtx.fillRect(0, 0, shadowCanvas.width, shadowCanvas.height);
+
+        // Composite xor to punch out the "light source"
+        shadowCanvasCtx.globalCompositeOperation = 'xor';
+
+        // Change color for xor operation
+        shadowCanvasCtx.fillStyle = "white";
+
+        // Draw the light radius around the player
+        shadowCanvasCtx.arc(player.x + (player.width / 2), player.y + (player.height / 2), player.lightRadius, 0, 2 * Math.PI);
+        shadowCanvasCtx.arc(player2.x + (player2.width / 2), player2.y + (player2.height / 2), player2.lightRadius, 0, 2 * Math.PI);
+
+        shadowCanvasCtx.fill();
+
+        // Draw the shadow layer on the canvas
+        canvas.drawImage(shadowCanvas, 0, 0);
+
         player.draw();
 		player2.draw();
 
