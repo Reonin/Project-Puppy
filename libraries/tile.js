@@ -1,5 +1,5 @@
 (function() {
-  function LoaderProxy() {
+  function LoaderProxy2() {
     return {
       draw: $.noop,
       fill: $.noop,
@@ -45,7 +45,7 @@
   
   Tile.load = function(url, loadedCallback) {
     var img = new Image();
-    var proxy = LoaderProxy();
+    var proxy = LoaderProxy2();
     
     img.onload = function() {
       var tile = Tile(this);
@@ -67,7 +67,7 @@
   window.Tile = function(name, callback) {
     return Tile.load(spriteImagePath + name + ".png", callback);
   };
-  window.Tile.EMPTY = LoaderProxy();
+  window.Tile.EMPTY = LoaderProxy2();
   window.Tile.load = Tile.load;
 }());
 

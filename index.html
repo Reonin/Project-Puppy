@@ -13,7 +13,8 @@
 	<script src="libraries/howler.min.js" type="text/javascript"></script> <!-- Audio, https://github.com/goldfire/howler.js/ -->
 	<script src="libraries/jquery.hotkeys.js" type="text/javascript"></script> <!-- Keyboard mapping, https://github.com/tzuryby/jquery.hotkeys -->
 	<script src="libraries/sprite.js" type="text/javascript"></script> <!-- Sprite Mapping,  -->
-
+	<script src="libraries/map.js" type="text/javascript"></script> <!-- Sprite Mapping,  -->
+	<script src="libraries/tile.js" type="text/javascript"></script> 
 
 </head>
 
@@ -86,9 +87,10 @@ $(window).on('resize', function() {
     scaleToSmallest();
 });
 
+drawMap(canvas);
+
+
 // Game State 
-
-
 var states = {
     splash: 0,
     title: 1,
@@ -491,6 +493,9 @@ function onMouseMove(e) {
     //console.log('the mouse is at ' + xm + 'and' + ym);
 }
 
+//Draw the Array of maptiles
+
+
 function controller(){
      //Pause the game
     if (keydown.p) {
@@ -690,6 +695,12 @@ function draw() { //Draws objects to the canvas
 
     if (currentState === states.Game) {
         parallax.Draw(); //draw background
+
+        //Tile draw
+
+        tileArray.forEach(function(tile)){
+            tile.draw();
+        });
 
         // Draw the shadow above the background but below the players and UI elements
         // Create a canvas for the mask
