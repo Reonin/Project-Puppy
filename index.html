@@ -18,6 +18,16 @@
 </head>
 
 <body>
+    <div id="text-shadow-box">
+<!-- to disable shadows comment out this -->
+    <div id="tsb-box"></div>
+    <p id="tsb-text"></p> 
+    </div>
+     <div id="tsb-spot"></div>
+
+<!-- to this and comment out the initShadows() function call -->
+
+
 	<style>
     html {
         width: 100%;
@@ -38,7 +48,97 @@
         display: block;
         border: none;
 	}
- 
+ #text-shadow-box {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: url('') no-repeat center top #444;
+   
+    font-family: Helvetica, Arial, sans-serif;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-user-select: none;
+}
+
+#text-shadow-box #tsb-text,
+#text-shadow-box #tsb-link {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 1em;
+    margin: -0.77em 0 0 0;
+    font-size: 90px;
+    line-height: 1em;
+    font-weight: bold;
+    text-align: center;
+}
+
+#text-shadow-box #tsb-text {
+    font-size: 100px;
+    color: transparent;
+    text-shadow: black 0px -45.2px 19px; 
+}
+
+#text-shadow-box #tsb-link a {
+    color: #999;
+    text-decoration: none;
+}
+
+#text-shadow-box #tsb-box,
+#text-shadow-box #tsb-wall {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 60%;
+}
+
+#text-shadow-box #tsb-box {
+    -webkit-box-shadow: black 0px -45.2px 39px;
+    -moz-box-shadow: black 0px -45.2px 39px;
+}
+
+#text-shadow-box #tsb-wall {
+    background: #999;
+}
+
+#text-shadow-box #tsb-wall p {
+    position: relative;
+    font-size: 18px;
+    line-height: 1.5em;
+    text-align: justify;
+    color: #222;
+    width: 550px;
+    margin: 1.5em auto;
+    cursor: default;
+}
+
+#text-shadow-box #tsb-wall p a {
+    color: #fff;
+}
+
+#text-shadow-box #tsb-wall p a:hover {
+    text-decoration: none;
+    color: #000;
+    background: #fff;
+}
+
+#tsb-spot {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    pointer-events: none;
+    background: -webkit-gradient(radial, center center, 0, center center, 450, from(rgba(0,0,0,0)), to(rgba(0,0,0,1)));
+    background: -moz-radial-gradient(center 45deg, circle closest-side, transparent 0, black 450px);
+}
+
 
 	</style>
 <script>
@@ -49,7 +149,7 @@ var CANVAS_HEIGHT = 1080;
 
 var canvasElement = $("<canvas id ='GameCanvasScreen' width='" + CANVAS_WIDTH + "' height='" + CANVAS_HEIGHT + "'></canvas>");
 var canvas = canvasElement.get(0).getContext("2d");
-canvasElement.appendTo('body');
+canvasElement.appendTo('#text-shadow-box');
 
 function scaleToSmallest() {
     var ratio = CANVAS_WIDTH / CANVAS_HEIGHT;
@@ -76,24 +176,34 @@ var states = {
     Game: 2,
     End: 3
 };
-var currentState = states.Game;//states.splash;
+var currentState = states.title;//states.splash;
 
 //Game Loop
 //var FPS = 60;
+
+// shim layer with setTimeout fallback
+window.requestAnimFrame = (function(){
+  return  window.requestAnimationFrame       ||
+          window.webkitRequestAnimationFrame ||
+          window.mozRequestAnimationFrame    ||
+          function( callback ){
+            window.setTimeout(callback, 1000 / 60);
+          };
+})();
+
+
 function gameloop() {
     controller();
     if (paused == false) {
     update();
     draw();
-   
-        //;
     }
-window.requestAnimationFrame(gameloop);
+window.requestAnimFrame(gameloop);
 }
 
 var paused = false;
 
- window.requestAnimationFrame(gameloop);
+ window.requestAnimFrame(gameloop);
 
 
 //Keyboard Map
@@ -433,6 +543,58 @@ function ParallaxScrolling(canvas, imgdata) {
 var layer = new Array('images/fantasy_space.jpg', 'images/planet.png');
 var parallax = new ParallaxScrolling(canvas, layer);
 
+
+var text = null;
+var spot = null;
+var box = null;
+var boxProperty = '';
+
+
+
+function initShadows() {
+    text = document.getElementById('tsb-text');
+    spot = document.getElementById('tsb-spot');
+    box = document.getElementById('tsb-box');
+    
+    if (typeof box.style.webkitBoxShadow == 'string') {
+        boxProperty = 'webkitBoxShadow';
+    } else if (typeof box.style.MozBoxShadow == 'string') {
+        boxProperty = 'MozBoxShadow';
+    } else if (typeof box.style.boxShadow == 'string') {
+        boxProperty = 'boxShadow';
+    }
+
+    if (text && spot && box) {
+        document.getElementById('text-shadow-box').onmousemove = onMouseMove;
+        document.getElementById('text-shadow-box').ontouchmove = function (e) {e.preventDefault(); e.stopPropagation(); onMouseMove({clientX: e.touches[0].clientX, clientY: e.touches[0].clientY});};
+    }
+}
+
+
+function onMouseMove(e) {
+    if (typeof e === 'undefined' || typeof e.clientX === 'undefined') {
+        return;
+    }
+    
+    var xm = (e.clientX - Math.floor(window.innerWidth / 2)) * 0.4;
+    var ym = (e.clientY - Math.floor(window.innerHeight / 3)) * 0.4;
+    var d = Math.round(Math.sqrt(xm*xm + ym*ym) / 5);
+    text.style.textShadow = -xm + 'px ' + -ym + 'px ' + (d + 10) + 'px black';
+    
+    if (boxProperty) {
+        box.style[boxProperty] = '0 ' + -ym + 'px ' + (d + 30) + 'px black';
+    }
+    
+    xm = e.clientX - Math.floor(window.innerWidth / 2);
+    ym = e.clientY - Math.floor(window.innerHeight / 2);
+    spot.style.backgroundPosition = xm + 'px ' + ym + 'px';
+    //console.log('the mouse is at ' + xm + 'and' + ym);
+}
+
+
+
+
+
 function controller(){
      //Pause the game
     if (keydown.p) {
@@ -476,7 +638,8 @@ function update() { //Updates location and reaction of objects to the canvas
 
 
     if (currentState === states.Game) {
-
+        //generate shadows
+         initShadows();
 
         //Player Movement Controls
         if (keydown.left) {
@@ -496,7 +659,7 @@ function update() { //Updates location and reaction of objects to the canvas
         }
 
         player.x = player.x.clamp(0, CANVAS_WIDTH - player.width); //prevents character from going past canvas
-
+        player.y = player.y.clamp(0, CANVAS_HEIGHT - player.height); //prevents character from going past canvas
 		
 		  //Player2 Movement Controls
         if (keydown.a) {
@@ -516,7 +679,7 @@ function update() { //Updates location and reaction of objects to the canvas
         }
 
         player2.x = player2.x.clamp(0, CANVAS_WIDTH - player2.width); //prevents character from going past canvas
-
+        player2.y = player2.y.clamp(0, CANVAS_HEIGHT - player2.height); //prevents character from going past canvas
 		
         //Player actions
         if (keydown.space) {
@@ -533,7 +696,7 @@ function update() { //Updates location and reaction of objects to the canvas
 
 
         //Enemy Update logic
-        enemies.forEach(function(enemy) {
+     /*   enemies.forEach(function(enemy) {
             enemy.update();
         });
 
@@ -544,7 +707,7 @@ function update() { //Updates location and reaction of objects to the canvas
         if (Math.random() < 0.1) {
             enemies.push(Enemy());
         }
-
+*/
         //Handle Collision
         handleCollisions();
 
@@ -592,7 +755,7 @@ function draw() { //Draws objects to the canvas
 
         canvas.fillStyle = "#000"; // Set color to black
         canvas.font = 'bold 40pt Calibri';
-        var GAME_NAME_TEXT = "GAME NAME";
+        var GAME_NAME_TEXT = "Codename Project Puppy";
         gameTextx = canvas.measureText(GAME_NAME_TEXT).width; //Centers the text based on length
         canvas.fillText(GAME_NAME_TEXT, (CANVAS_WIDTH / 2) - (gameTextx / 2) - 3, CANVAS_HEIGHT / 3);
         //The next two create a special text effect
@@ -624,9 +787,9 @@ function draw() { //Draws objects to the canvas
 
 
         //Enemy Draw
-        enemies.forEach(function(enemy) {
+       /* enemies.forEach(function(enemy) {
             enemy.draw();
-        });
+        });*/
 
 
         //Life Bar top is pink static background
