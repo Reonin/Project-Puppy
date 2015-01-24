@@ -170,16 +170,15 @@ var endTextY = 0;
 
 //Sound creation
 var GameLoopMusic_sound = new Howl({
-    urls: ['sounds/In-Orbit.mp3'],
+    urls: ['sounds/gameplay_song.wav'],
     autoplay: true,
     loop: true,
 });
-var explosion_sound = new Howl({
-    urls: ['sounds/explosion.mp3', 'sounds/explosion.wav']
+var Lose = new Howl({
+    urls: ['sounds/dogs_lose.wav']
 });
-var shoot_sound = new Howl({
-    urls: ['sounds/shoot.mp3', 'sounds/shoot.wav'],
-    volume: 0.2
+var Win = new Howl({
+    urls: ['sounds/dogs_win.wav'],
 });
 
 //explosion_sound.play();
