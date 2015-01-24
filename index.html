@@ -587,7 +587,7 @@ function onMouseMove(e) {
     var xm = (e.clientX - Math.floor(window.innerWidth / 2)) * 0.4;
     var ym = (e.clientY - Math.floor(window.innerHeight / 3)) * 0.4;
     var d = Math.round(Math.sqrt(xm*xm + ym*ym) / 5);
-    text.style.textShadow = -xm + 'px ' + -ym + 'px ' + (d + 10) + 'px black';
+    //text.style.textShadow = -xm + 'px ' + -ym + 'px ' + (d + 10) + 'px black';
     
     if (boxProperty) {
         box.style[boxProperty] = '0 ' + -ym + 'px ' + (d + 30) + 'px black';
@@ -601,7 +601,8 @@ function onMouseMove(e) {
 
 
 
-
+//generate shadows
+         initShadows();
 
 function controller(){
      //Pause the game
@@ -646,8 +647,7 @@ function update() { //Updates location and reaction of objects to the canvas
 
 
     if (currentState === states.Game) {
-        //generate shadows
-         initShadows();
+        
 
         //Player Movement Controls
         if (keydown.left) {
@@ -694,14 +694,14 @@ function update() { //Updates location and reaction of objects to the canvas
             player.shoot();
         }
 
-        playerBullets.forEach(function(bullet) {
+/*        playerBullets.forEach(function(bullet) {
             bullet.update();
         });
 
         playerBullets = playerBullets.filter(function(bullet) {
             return bullet.active;
         });
-
+*/
 
         //Enemy Update logic
      /*   enemies.forEach(function(enemy) {
@@ -789,10 +789,10 @@ function draw() { //Draws objects to the canvas
         player.draw();
 		player2.draw();
 
-        playerBullets.forEach(function(bullet) {
+    /*    playerBullets.forEach(function(bullet) {
             bullet.draw();
         });
-
+*/
 
         //Enemy Draw
        /* enemies.forEach(function(enemy) {
