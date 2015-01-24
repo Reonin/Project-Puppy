@@ -214,6 +214,10 @@ var player = {
     spriteLastTickTime: 0,
     x: 220,
     y: 680,
+    velX: 0,
+    velY: 0,
+    speed: 5,
+    friction: 0.85,
     width: 32,
     height: 32,
     life: 100,
@@ -276,7 +280,10 @@ var player2 = {
     spriteLastTickTime: 0,
     x: 820,
     y: 680,
-    width: 32,
+    velX: 0,
+    velY: 0,
+    speed: 5,
+    friction: 0.85,
     height: 32,
     life: 100,
     baseLightRadius: 40,
@@ -575,56 +582,82 @@ function update() { //Updates location and reaction of objects to the canvas
 
         //Player Movement Controls
         if (keydown.left) {
-            player.x -= 5;
+            if ( player.velX > -player.speed ) {
+                player.velX--;
+            }
 
             animateSprite(player);
         }
 
         if (keydown.right) {
-            player.x += 5;
+            if ( player.velX < player.speed ) {
+                player.velX++;
+            }
 
             animateSprite(player);
         }
 		
 		if (keydown.up) {
-            player.y -= 5;
+            if ( player.velY > -player.speed ) {
+                player.velY--;
+            }
 
             animateSprite(player);
         }
 
         if (keydown.down) {
-            player.y += 5;
+            if ( player.velY < player.speed ) {
+                player.velY++;
+            }
 
             animateSprite(player);
         }
+
+        player.velX *= player.friction;
+        player.x += player.velX;
+        player.velY *= player.friction;
+        player.y += player.velY;
 
         player.x = player.x.clamp(0, CANVAS_WIDTH - player.width); //prevents character from going past canvas
         player.y = player.y.clamp(0, CANVAS_HEIGHT - player.height); //prevents character from going past canvas
 		
 		//Player2 Movement Controls
         if (keydown.a) {
-            player2.x -= 5;
+            if ( player2.velX > -player2.speed ) {
+                player2.velX--;
+            }
 
             animateSprite(player2);
         }
 
         if (keydown.d) {
-            player2.x += 5;
+            if ( player2.velX < player2.speed ) {
+                player2.velX++;
+            }
 
             animateSprite(player2);
         }
 		
 		if (keydown.w) {
-            player2.y -= 5;
+            if ( player2.velY > -player2.speed ) {
+                player2.velY--;
+            }
 
             animateSprite(player2);
         }
 
         if (keydown.s) {
-            player2.y += 5;
+            if ( player2.velY < player2.speed ) {
+                player2.velY++;
+            }
 
             animateSprite(player2);
         }
+
+        player2.velX *= player2.friction;
+        player2.x += player2.velX;
+        player2.velY *= player2.friction;
+        player2.y += player2.velY;
 
         player2.x = player2.x.clamp(0, CANVAS_WIDTH - player2.width); //prevents character from going past canvas
         player2.y = player2.y.clamp(0, CANVAS_HEIGHT - player2.height); //prevents character from going past canvas
