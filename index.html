@@ -690,6 +690,7 @@ function update() { //Updates location and reaction of objects to the canvas
         player2.x = player2.x.clamp(0, CANVAS_WIDTH - player2.width); //prevents character from going past canvas
         player2.y = player2.y.clamp(0, CANVAS_HEIGHT - player2.height); //prevents character from going past canvas
 
+        /*
         // Grow BOTH shadows on Space
         if (keydown.space) {
             player.lightRadius++;
