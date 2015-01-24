@@ -169,19 +169,28 @@ var endTextX = CANVAS_WIDTH / 3;
 var endTextY = 0;
 
 //Sound creation
-var GameLoopMusic_sound = new Howl({
+
+var verifysound = 0;
+
+var gameloop_sound = new Howl({
     urls: ['sounds/gameplay_song.wav'],
-    autoplay: true,
+//	autoplay: true,
     loop: true,
 });
-var Lose = new Howl({
+var menuloop_sound = new Howl({
+    urls: ['sounds/menu_song.wav'],
+    loop: true,
+});
+var creditloop_sound = new Howl({
+    urls: ['sounds/credits.mp3'],
+    loop: true,
+});
+var lose_sound = new Howl({
     urls: ['sounds/dogs_lose.wav']
 });
-var Win = new Howl({
+var win_sound = new Howl({
     urls: ['sounds/dogs_win.wav'],
 });
-
-//explosion_sound.play();
 
 //Create The player
 var player = {
@@ -520,21 +529,35 @@ function update() { //Updates location and reaction of objects to the canvas
 
 
     if (currentState === states.title) {
-
-        if (keydown.space) {
-
+		
+		if (verifysound == 0)  {
+		menuloop_sound.play();
+		verifysound = 1;
+		}
+		
+		if (keydown.space) {
             currentState = states.Game;
+			verifysound = 0;
+			menuloop_sound.stop();
         }
 
 
     }
 
 
-    if (currentState === states.Game) {
-        // Init timer
+    if (currentState == states.Game) {
+			
+		if (verifysound == 0)  {
+		gameloop_sound.play();
+		verifysound = 1;
+		}
+
+		// Init timer
         if ( !lastTime ) {
             var newDateObj = new Date();
             lastTime = newDateObj.getTime();
+			
+			
         }
 
         //Player Movement Controls
@@ -750,7 +773,6 @@ function draw() { //Draws objects to the canvas
 
 
     if (currentState === states.End) {
-
 
         canvas.fillStyle = "#F00"; // Set color to red
         canvas.font = '25pt Calibri';
