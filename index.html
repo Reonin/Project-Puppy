@@ -178,6 +178,7 @@ var player = {
     width: 32,
     height: 32,
     life: 100,
+    baseLightRadius: 40,
     lightRadius: 40,
     draw: function() {
         //canvas.fillStyle = this.color;
@@ -231,6 +232,7 @@ var player2 = {
     width: 32,
     height: 32,
     life: 100,
+    baseLightRadius: 40,
     lightRadius: 40,
     draw: function() {
         //canvas.fillStyle = this.color;
@@ -541,7 +543,7 @@ function update() { //Updates location and reaction of objects to the canvas
         player.x = player.x.clamp(0, CANVAS_WIDTH - player.width); //prevents character from going past canvas
         player.y = player.y.clamp(0, CANVAS_HEIGHT - player.height); //prevents character from going past canvas
 		
-		  //Player2 Movement Controls
+		//Player2 Movement Controls
         if (keydown.a) {
             player2.x -= 5;
         }
@@ -560,14 +562,51 @@ function update() { //Updates location and reaction of objects to the canvas
 
         player2.x = player2.x.clamp(0, CANVAS_WIDTH - player2.width); //prevents character from going past canvas
         player2.y = player2.y.clamp(0, CANVAS_HEIGHT - player2.height); //prevents character from going past canvas
+
+        // Grow BOTH shadows on Space
         if (keydown.space) {
+            player.lightRadius++;
+            player2.lightRadius++;
+            
+            // TODO: Accelerate the timer
+        }
+        else {
+            if ( player.lightRadius > player.baseLightRadius ) {
+                player.lightRadius--;
+            }
+            if ( player2.lightRadius > player2.baseLightRadius ) {
+                player2.lightRadius--;
+            }
         }
 
+        /*
+        // Grow shadows independently
 
+        // player1 
+        if (keydown["/"]) {
+            player.lightRadius++;
 
-
-
+            // TODO: Accelerate the timer
         }
+        else {
+            if ( player.lightRadius > player.baseLightRadius ) {
+                player.lightRadius--;
+            }
+        }
+
+        // player2 
+        if (keydown.e) {
+            player2.lightRadius++;
+
+            // TODO: Accelerate the timer
+        }
+        else {
+            if ( player2.lightRadius > player2.baseLightRadius ) {
+                player2.lightRadius--;
+            }
+        }
+        */
+		
         //Handle Collision
         handleCollisions();
     }
