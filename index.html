@@ -181,12 +181,35 @@ var Win = new Howl({
     urls: ['sounds/dogs_win.wav'],
 });
 
+function animateSprite(object) {
+    // Sprite walk cycle
+    var newDateObj = new Date();
+
+    if ( (newDateObj.getTime() - object.spriteLastTickTime) >= object.spriteCooldown ) {
+        if ( object.spriteIndex < ( object.sprite.length - 1) ) {
+            object.spriteIndex++;
+        }
+        else {
+            object.spriteIndex = 0;
+        }
+        object.spriteLastTickTime = newDateObj.getTime();
+    }
+}
+
 //explosion_sound.play();
 
 //Create The player
 var player = {
     // color: "#00A",
-    sprite: Sprite("spaceship"),
+    sprite: [
+        Sprite("player1-sprite/player1-1"),
+        Sprite("player1-sprite/player1-2"),
+        Sprite("player1-sprite/player1-3"),
+        Sprite("player1-sprite/player1-4")
+    ],
+    spriteIndex: 0,
+    spriteCooldown: 100,
+    spriteLastTickTime: 0,
     x: 220,
     y: 680,
     width: 32,
@@ -197,7 +220,7 @@ var player = {
     draw: function() {
         //canvas.fillStyle = this.color;
         // canvas.fillRect(this.x, this.y, this.width, this.height);
-        this.sprite.draw(canvas, this.x, this.y);
+        this.sprite[this.spriteIndex].draw(canvas, this.x, this.y);
     },
     shoot: function() {
         var bulletPosition = this.midpoint();
@@ -240,7 +263,15 @@ var player = {
 //Create The player2
 var player2 = {
     // color: "#00A",
-    sprite: Sprite("player"),
+    sprite: [
+        Sprite("player2-sprite/player2-1"),
+        Sprite("player2-sprite/player2-2"),
+        Sprite("player2-sprite/player2-3"),
+        Sprite("player2-sprite/player2-4")
+    ],
+    spriteIndex: 0,
+    spriteCooldown: 100,
+    spriteLastTickTime: 0,
     x: 820,
     y: 680,
     width: 32,
@@ -251,7 +282,7 @@ var player2 = {
     draw: function() {
         //canvas.fillStyle = this.color;
         // canvas.fillRect(this.x, this.y, this.width, this.height);
-        this.sprite.draw(canvas, this.x, this.y);
+        this.sprite[this.spriteIndex].draw(canvas, this.x, this.y);
     },
     shoot: function() {
         var bulletPosition = this.midpoint();
@@ -540,18 +571,26 @@ function update() { //Updates location and reaction of objects to the canvas
         //Player Movement Controls
         if (keydown.left) {
             player.x -= 5;
+
+            animateSprite(player);
         }
 
         if (keydown.right) {
             player.x += 5;
+
+            animateSprite(player);
         }
 		
 		if (keydown.up) {
             player.y -= 5;
+
+            animateSprite(player);
         }
 
         if (keydown.down) {
             player.y += 5;
+
+            animateSprite(player);
         }
 
         player.x = player.x.clamp(0, CANVAS_WIDTH - player.width); //prevents character from going past canvas
@@ -560,18 +599,26 @@ function update() { //Updates location and reaction of objects to the canvas
 		//Player2 Movement Controls
         if (keydown.a) {
             player2.x -= 5;
+
+            animateSprite(player2);
         }
 
         if (keydown.d) {
             player2.x += 5;
+
+            animateSprite(player2);
         }
 		
 		if (keydown.w) {
             player2.y -= 5;
+
+            animateSprite(player2);
         }
 
         if (keydown.s) {
             player2.y += 5;
+
+            animateSprite(player2);
         }
 
         player2.x = player2.x.clamp(0, CANVAS_WIDTH - player2.width); //prevents character from going past canvas
