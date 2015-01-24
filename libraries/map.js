@@ -7,6 +7,8 @@ var mapArray = [
     [0, 0, 1, 1 ,0]
 ];
 
+var tileArray = new Array();
+
 function drawMap(canvas) {
     background = canvas;      
     for (var i = 0; i < mapArray.length; i++) {
@@ -15,8 +17,8 @@ function drawMap(canvas) {
             var newTile = {
     		// color: "#00A",
     		tile: Tile("spaceship"),
-    		x: 28,
-    		y: 28,
+    		x: j*28,
+    		y: i*28,
     		width:	60,
     		height: 60,
     		
@@ -27,7 +29,7 @@ function drawMap(canvas) {
 	     }
 	   };
 
-		newTile.draw();
+		tileArray.push(newTile);
                //console.log(newTile.x);
             //  <!--canvas.drawImage(image1, x*28, y*28);-->
 	    }
@@ -46,7 +48,7 @@ function drawMap(canvas) {
         	this.tile.draw(canvas, this.x, this.y);
     }
 };
-		newTile.draw();
+		tileArray.push(newTile);
             //canvas.drawImage(image2, x*28, y*28);-->
             }
            
@@ -55,5 +57,6 @@ function drawMap(canvas) {
         }
     }
    //canvas.addChild(background);-->     
+   return tileArray;
 }
 
