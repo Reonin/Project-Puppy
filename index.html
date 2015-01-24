@@ -47,6 +47,7 @@ var CANVAS_HEIGHT = 1080;
 
 var canvasElement = $("<canvas id ='GameCanvasScreen' width='" + CANVAS_WIDTH + "' height='" + CANVAS_HEIGHT + "'></canvas>");
 var canvas = canvasElement.get(0).getContext("2d");
+canvasElement.appendTo('body');
 
 function scaleToSmallest() {
     var ratio = CANVAS_WIDTH / CANVAS_HEIGHT;
