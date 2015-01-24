@@ -76,7 +76,7 @@ var states = {
     Game: 2,
     End: 3
 };
-var currentState = states.splash;
+var currentState = states.Game;//states.splash;
 
 //Game Loop
 //var FPS = 60;
@@ -166,6 +166,58 @@ var player = {
     // color: "#00A",
     sprite: Sprite("spaceship"),
     x: 220,
+    y: 680,
+    width: 32,
+    height: 32,
+    life: 100,
+    draw: function() {
+        //canvas.fillStyle = this.color;
+        // canvas.fillRect(this.x, this.y, this.width, this.height);
+        this.sprite.draw(canvas, this.x, this.y);
+    },
+    shoot: function() {
+        var bulletPosition = this.midpoint();
+        shoot_sound.play();
+
+        playerBullets.push(Bullet({
+            speed: 5,
+            x: bulletPosition.x,
+            y: bulletPosition.y
+        }))
+    },
+    midpoint: function() {
+        return {
+            x: this.x + this.width / 2,
+            y: this.y + this.height / 2
+        };
+    },
+    explode: function() {
+        this.active = false;
+        explosion_sound.play();
+        GameLoopMusic_sound.fadeOut(0, 2000);
+        currentState = states.End;
+        // An explosion sound and then end the game
+    },
+    lifeChange: function(change) {
+
+
+        this.life = this.life + change; //Adds or subtracts health based on the value added in the function
+
+        if (this.life <= 0) {
+            this.explode();
+        }
+
+        return this.life;
+
+
+    }
+};
+
+//Create The player2
+var player2 = {
+    // color: "#00A",
+    sprite: Sprite("spaceship"),
+    x: 820,
     y: 680,
     width: 32,
     height: 32,
@@ -434,9 +486,38 @@ function update() { //Updates location and reaction of objects to the canvas
         if (keydown.right) {
             player.x += 5;
         }
+		
+		if (keydown.up) {
+            player.y -= 5;
+        }
+
+        if (keydown.down) {
+            player.y += 5;
+        }
 
         player.x = player.x.clamp(0, CANVAS_WIDTH - player.width); //prevents character from going past canvas
 
+		
+		  //Player2 Movement Controls
+        if (keydown.a) {
+            player2.x -= 5;
+        }
+
+        if (keydown.d) {
+            player2.x += 5;
+        }
+		
+		if (keydown.w) {
+            player2.y -= 5;
+        }
+
+        if (keydown.s) {
+            player2.y += 5;
+        }
+
+        player2.x = player2.x.clamp(0, CANVAS_WIDTH - player2.width); //prevents character from going past canvas
+
+		
         //Player actions
         if (keydown.space) {
             player.shoot();
@@ -535,7 +616,7 @@ function draw() { //Draws objects to the canvas
     if (currentState === states.Game) {
         parallax.Draw(); //draw background
         player.draw();
-
+		player2.draw();
 
         playerBullets.forEach(function(bullet) {
             bullet.draw();
