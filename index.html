@@ -45,6 +45,27 @@ var CANVAS_WIDTH = 1920;
 var CANVAS_HEIGHT = 1080;
 //HD Resolutions -1280x720 and 1920 × 1080 Full HD
 
+/*
+    TICK BASED TIMER
+ */
+var timerMaxVal = 600;
+var timerCurrVal = timerMaxVal;
+var timerTickAmount = 1;
+var timerTickDifference = 100;
+
+var lastTime;
+
+function updateTimer(accelVal) {
+    var newDateObj = new Date();
+
+    // If the "tick difference" has passed
+    if ( (newDateObj.getTime() - lastTime) >= (timerTickDifference / accelVal) ) {
+        timerCurrVal -= timerTickAmount;
+        console.log(timerCurrVal);
+        lastTime = newDateObj.getTime();
+    }
+}
+
 var canvasElement = $("<canvas id ='GameCanvasScreen' width='" + CANVAS_WIDTH + "' height='" + CANVAS_HEIGHT + "'></canvas>");
 var canvas = canvasElement.get(0).getContext("2d");
 canvasElement.appendTo('body');
@@ -122,12 +143,6 @@ function setUpKeys() {
     });
 };
 setUpKeys();
-
-var notyet = 0;    
-function clearTimer() {
-    notyet = 0;   
-}  
-
 
 function pauseGame() {
     if (notyet == 1) {
@@ -452,22 +467,6 @@ function ParallaxScrolling(canvas, imgdata) {
 var layer = new Array('images/gridback.png' /*,'images/planet.png'*/);
 var parallax = new ParallaxScrolling(canvas, layer);
 
-//Timer
-var TimerInt;
-function countDown(i) {
-
-     timerInt = setInterval(function () {
-		if(i == 0){
-	console.log("TImes up");
-	}
-        console.log( "Number: " + i);
-        i-- || clearInterval(timerInt);  //if i is 0, then stop the interval
-    }, 1000);
-	
-}
-countDown(5);
-
-
 var text = null;
 var spot = null;
 var box = null;
@@ -506,9 +505,6 @@ function controller(){
 
 function update() { //Updates location and reaction of objects to the canvas
 
-
-
-
     if (currentState === states.splash) {
 
         //splashTextX += 1;
@@ -536,7 +532,11 @@ function update() { //Updates location and reaction of objects to the canvas
 
 
     if (currentState === states.Game) {
-        
+        // Init timer
+        if ( !lastTime ) {
+            var newDateObj = new Date();
+            lastTime = newDateObj.getTime();
+        }
 
         //Player Movement Controls
         if (keydown.left) {
@@ -583,7 +583,8 @@ function update() { //Updates location and reaction of objects to the canvas
             player.lightRadius++;
             player2.lightRadius++;
             
-            // TODO: Accelerate the timer
+            // Update the timer
+            updateTimer(2);
         }
         else {
             if ( player.lightRadius > player.baseLightRadius ) {
@@ -592,6 +593,8 @@ function update() { //Updates location and reaction of objects to the canvas
             if ( player2.lightRadius > player2.baseLightRadius ) {
                 player2.lightRadius--;
             }
+            // Update the timer
+            updateTimer(1);
         }
 
         /*
