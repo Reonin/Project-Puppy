@@ -70,6 +70,8 @@ function updateTimer(accelVal) {
 var canvasElement = $("<canvas id ='GameCanvasScreen' width='" + CANVAS_WIDTH + "' height='" + CANVAS_HEIGHT + "'></canvas>");
 var canvas = canvasElement.get(0).getContext("2d");
 canvasElement.appendTo('body');
+var shadowCanvas = document.createElement('canvas');
+var shadowCanvasCtx = shadowCanvas.getContext('2d');
 
 function scaleToSmallest() {
     var ratio = CANVAS_WIDTH / CANVAS_HEIGHT;
@@ -295,6 +297,7 @@ var player2 = {
     velY: 0,
     speed: 5,
     friction: 0.85,
+    width: 32,
     height: 32,
     life: 100,
     baseLightRadius: 40,
@@ -705,8 +708,8 @@ function update() { //Updates location and reaction of objects to the canvas
             // Update the timer
             updateTimer(1);
         }
+        */
 
-        /*
         // Grow shadows independently
 
         // player1 
@@ -732,7 +735,6 @@ function update() { //Updates location and reaction of objects to the canvas
                 player2.lightRadius--;
             }
         }
-        */
 		
         //Handle Collision
         handleCollisions();
@@ -758,6 +760,7 @@ function update() { //Updates location and reaction of objects to the canvas
 function draw() { //Draws objects to the canvas
 
     canvas.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    shadowCanvasCtx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
 
 
@@ -808,27 +811,30 @@ function draw() { //Draws objects to the canvas
         });
 
         // Draw the shadow above the background but below the players and UI elements
-        // Create a canvas for the mask
-        var shadowCanvas = document.createElement('canvas');
 
         // Set it to the size of the main canvas
         shadowCanvas.width = canvasElement.get(0).width;
         shadowCanvas.height = canvasElement.get(0).height;
-        var shadowCanvasCtx = shadowCanvas.getContext('2d');
         // Fill the mask with black
         shadowCanvasCtx.fillStyle = "black";
         shadowCanvasCtx.fillRect(0, 0, shadowCanvas.width, shadowCanvas.height);
 
         // Composite xor to punch out the "light source"
-        shadowCanvasCtx.globalCompositeOperation = 'xor';
-
-        // Change color for xor operation
-        shadowCanvasCtx.fillStyle = "white";
+        shadowCanvasCtx.globalCompositeOperation = 'destination-out';
 
         // Draw the light radius around the player
+        p1Gradient = shadowCanvasCtx.createRadialGradient(player.x + (player.width / 2), player.y + (player.height / 2), 0, player.x + (player.width / 2), player.y + (player.height / 2), player.lightRadius);
+        p1Gradient.addColorStop(0,"black");
+        p1Gradient.addColorStop(1,"transparent");
         shadowCanvasCtx.arc(player.x + (player.width / 2), player.y + (player.height / 2), player.lightRadius, 0, 2 * Math.PI);
-        shadowCanvasCtx.arc(player2.x + (player2.width / 2), player2.y + (player2.height / 2), player2.lightRadius, 0, 2 * Math.PI);
+        shadowCanvasCtx.fillStyle = p1Gradient;
+        shadowCanvasCtx.fill();
 
+        p2Gradient = shadowCanvasCtx.createRadialGradient(player2.x + (player2.width / 2), player2.y + (player2.height / 2), 0, player2.x + (player2.width / 2), player2.y + (player2.height / 2), player2.lightRadius);
+        p2Gradient.addColorStop(0,"black");
+        p2Gradient.addColorStop(1,"transparent");
+        shadowCanvasCtx.arc(player2.x + (player2.width / 2), player2.y + (player2.height / 2), player2.lightRadius, 0, 2 * Math.PI);
+        shadowCanvasCtx.fillStyle = p2Gradient;
         shadowCanvasCtx.fill();
 
         // Draw the shadow layer on the canvas
