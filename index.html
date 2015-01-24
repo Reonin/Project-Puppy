@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="mobile-web-app-capable" content="yes">
+
+	<title>Basic Game Template</title>
+<!-- Add Javascript or game libraries here-->
+	<script src="libraries/jquery-2.1.3.min.js" type="text/javascript"></script><!-- Web Manipulation-->
+	<script src="libraries/howler.min.js" type="text/javascript"></script> <!-- Audio, http://goldfirestudios.com/blog/104/howler.js-Modern-Web-Audio-Javascript-Library -->
+	<script src="libraries/jquery.hotkeys.js" type="text/javascript"></script> <!-- Keyboard mapping, https://github.com/tzuryby/jquery.hotkeys -->
+	<script src="libraries/sprite.js" type="text/javascript"></script> <!-- Sprite Mapping,  -->
+
+
+</head>
+
+<body>
+	<style>
+	#GameCanvasScreen{
+	padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    width: 800px;
+    border-style: groove;
+    border-width: medium;
+	}
+ 
+
+	</style>
+<script>
+//Generate the Canvas
+var CANVAS_WIDTH = 1280;
+var CANVAS_HEIGHT = 720;
+//HD Resolutions -1280x720 and 1920 × 1080 Full HD
+
+var canvasElement = $("<canvas id ='GameCanvasScreen' width='" + CANVAS_WIDTH + "' height='" + CANVAS_HEIGHT + "'></canvas>");
+var canvas = canvasElement.get(0).getContext("2d");
+canvasElement.appendTo('body');
+
+
+// Game State 
+
+
+var states = {
+    splash: 0,
+    title: 1,
+    Game: 2,
+    End: 3
+};
+var currentState = states.splash;
+
+//Game Loop
+//var FPS = 60;
+function gameloop() {
+    controller();
+    if (paused == false) {
+    update();
+    draw();
+   
+        //;
+    }
+window.requestAnimationFrame(gameloop);
+}
+
+var paused = false;
+
+ window.requestAnimationFrame(gameloop);
+
+
+//Keyboard Map
+function setUpKeys() {
+    window.keydown = {};
+
+    function keyName(event) {
+        return jQuery.hotkeys.specialKeys[event.which] ||
+            String.fromCharCode(event.which).toLowerCase();
+    }
+
+    $(document).bind("keydown", function(event) {
+        keydown[keyName(event)] = true;
+    });
+
+    $(document).bind("keyup", function(event) {
+        keydown[keyName(event)] = false;
+    });
+};
+setUpKeys();
+
+var notyet = 0;    
+function clearTimer() {
+    notyet = 0;   
+}  
+
+
+function pauseGame() {
+    if (notyet == 1) {
+        console.log("waiting")
+        return; 
+    }  
+     notyet = 1;
+     paused = !paused;
+     setTimeout('clearTimer()', 500);
+}
+
+//console.log(keydown.esc);
+
+
+//Canvas Utlity for preventing objects from going over the edge
+Number.prototype.clamp = function(min, max) {
+    return Math.min(Math.max(this, min), max);
+};
+
+//Text Variables
+var splashTextX = CANVAS_WIDTH / 3;
+var splashTextY = 0;
+var endTextX = CANVAS_WIDTH / 3;
+var endTextY = 0;
+
+//Sound creation
+var GameLoopMusic_sound = new Howl({
+    urls: ['sounds/In-Orbit.mp3'],
+    autoplay: true,
+    loop: true,
+});
+var explosion_sound = new Howl({
+    urls: ['sounds/explosion.mp3', 'sounds/explosion.wav']
+});
+var shoot_sound = new Howl({
+    urls: ['sounds/shoot.mp3', 'sounds/shoot.wav'],
+    volume: 0.2
+});
+
+//explosion_sound.play();
+
+//Create The player
+var player = {
+    // color: "#00A",
+    sprite: Sprite("spaceship"),
+    x: 220,
+    y: 680,
+    width: 32,
+    height: 32,
+    life: 100,
+    draw: function() {
+        //canvas.fillStyle = this.color;
+        // canvas.fillRect(this.x, this.y, this.width, this.height);
+        this.sprite.draw(canvas, this.x, this.y);
+    },
+    shoot: function() {
+        var bulletPosition = this.midpoint();
+        shoot_sound.play();
+
+        playerBullets.push(Bullet({
+            speed: 5,
+            x: bulletPosition.x,
+            y: bulletPosition.y
+        }))
+    },
+    midpoint: function() {
+        return {
+            x: this.x + this.width / 2,
+            y: this.y + this.height / 2
+        };
+    },
+    explode: function() {
+        this.active = false;
+        explosion_sound.play();
+        GameLoopMusic_sound.fadeOut(0, 2000);
+        currentState = states.End;
+        // An explosion sound and then end the game
+    },
+    lifeChange: function(change) {
+
+
+        this.life = this.life + change; //Adds or subtracts health based on the value added in the function
+
+        if (this.life <= 0) {
+            this.explode();
+        }
+
+        return this.life;
+
+
+    }
+};
+
+
+var playerBullets = [];
+
+function Bullet(I) {
+    I.active = true;
+
+    I.xVelocity = 0;
+    I.yVelocity = -I.speed;
+    I.width = 3;
+    I.height = 3;
+    I.color = "#000";
+
+    I.inBounds = function() {
+        return I.x >= 0 && I.x <= CANVAS_WIDTH &&
+            I.y >= 0 && I.y <= CANVAS_HEIGHT;
+    };
+
+    I.draw = function() {
+        canvas.fillStyle = this.color;
+        canvas.fillRect(this.x, this.y, this.width, this.height);
+    };
+
+    I.update = function() {
+        I.x += I.xVelocity;
+        I.y += I.yVelocity;
+
+        I.active = I.active && I.inBounds();
+    };
+
+    return I;
+}
+
+var enemies = [];
+
+function Enemy(I) {
+    I = I || {};
+
+    I.active = true;
+    I.age = Math.floor(Math.random() * 128);
+
+    I.sprite = Sprite("enemy");
+    // I.color = "#A2B";
+
+    I.x = CANVAS_WIDTH / 4 + Math.random() * CANVAS_WIDTH / 2;
+    I.y = 0;
+    I.xVelocity = 0
+    I.yVelocity = 2;
+
+    I.width = 32;
+    I.height = 32;
+
+    I.inBounds = function() {
+        return I.x >= 0 && I.x <= CANVAS_WIDTH &&
+            I.y >= 0 && I.y <= CANVAS_HEIGHT;
+    };
+
+    I.draw = function() {
+        //canvas.fillStyle = this.color;
+        //canvas.fillRect(this.x, this.y, this.width, this.height);
+        this.sprite.draw(canvas, this.x, this.y);
+    };
+
+    I.explode = function() {
+        this.active = false;
+        explosion_sound.play();
+        // Extra Credit: Add an explosion graphic
+    };
+
+    I.update = function() {
+        I.x += I.xVelocity;
+        I.y += I.yVelocity;
+
+        I.xVelocity = 3 * Math.sin(I.age * Math.PI / 64);
+
+        I.age++;
+
+        I.active = I.active && I.inBounds();
+    };
+
+    return I;
+};
+
+//Collision Detection
+function collides(a, b) {
+    return a.x < b.x + b.width &&
+        a.x + a.width > b.x &&
+        a.y < b.y + b.height &&
+        a.y + a.height > b.y;
+}
+
+
+function handleCollisions() {
+    playerBullets.forEach(function(bullet) {
+        enemies.forEach(function(enemy) {
+            if (collides(bullet, enemy)) {
+                enemy.explode();
+                bullet.active = false;
+            }
+        });
+    });
+
+    enemies.forEach(function(enemy) {
+        if (collides(enemy, player)) {
+            enemy.explode();
+            player.lifeChange(-10);
+        }
+    });
+}
+
+/*** Parrallax background tutorial http://javacoffee.de/?p=866 **/
+//Parallax background
+
+/** 
+ * Data structure to hold layer data
+ * @param s <string> Absolute path to the image
+ * @param x <int> X coordinate
+ * @param Y </int><int> Y coordinate
+ */
+function Layer(s, x, y) {
+    this.img = new Image();
+    this.img.src = s;
+    this.x = x;
+    this.y = y;
+}
+
+
+/**
+ * Main ParallaxScrolling class
+ * @param ctx <context> Canvas context
+ * @param imgdata <array> Array with absolute image paths
+ */
+function ParallaxScrolling(canvas, imgdata) {
+    var self = this;
+    if (typeof imgdata === 'undefined') {
+        imgdata = []; //fill it with paths to images for the parralax
+    };
+    this.canvas = canvas;
+
+    // Initialize the layers
+    this.layers = new Array(imgdata.length);
+    for (i = 0; i < imgdata.length; i++) {
+        this.layers[i] = new Layer(imgdata[i], 0, 0);
+    }
+
+    // Function: Move all layer except the first one
+    this.Move = function() {
+        for (var i = 1; i < self.layers.length; i++) {
+            if (self.layers[i].x > self.layers[i].img.width) self.layers[i].x = 0;
+            self.layers[i].x += i;
+        }
+    };
+
+    // Function: Draw all layer in the canvas
+    this.Draw = function() {
+        self.Move();
+        for (var i = 0; i < self.layers.length; i++) {
+            var x1 = (self.layers[i].x - self.layers[i].img.width);
+            self.canvas.drawImage(self.layers[i].img, 0, 0, self.layers[i].img.width, self.layers[i].img.height,
+                self.layers[i].x, 0, self.layers[i].img.width, self.layers[i].img.height);
+            self.canvas.drawImage(self.layers[i].img, 0, 0, self.layers[i].img.width, self.layers[i].img.height,
+                x1, 0, self.layers[i].img.width, self.layers[i].img.height);
+        }
+    }
+}
+
+var layer = new Array('images/fantasy_space.jpg', 'images/planet.png');
+var parallax = new ParallaxScrolling(canvas, layer);
+
+function controller(){
+     //Pause the game
+    if (keydown.p) {
+
+        pauseGame();
+        console.log(paused);
+
+    }
+
+}
+
+function update() { //Updates location and reaction of objects to the canvas
+
+
+
+
+    if (currentState === states.splash) {
+
+        //splashTextX += 1;
+        splashTextY += 1;
+
+        if (splashTextY >= 300) {
+
+            currentState = states.title;
+        }
+
+
+    }
+
+
+
+    if (currentState === states.title) {
+
+        if (keydown.space) {
+
+            currentState = states.Game;
+        }
+
+
+    }
+
+
+    if (currentState === states.Game) {
+
+
+        //Player Movement Controls
+        if (keydown.left) {
+            player.x -= 5;
+        }
+
+        if (keydown.right) {
+            player.x += 5;
+        }
+
+        player.x = player.x.clamp(0, CANVAS_WIDTH - player.width); //prevents character from going past canvas
+
+        //Player actions
+        if (keydown.space) {
+            player.shoot();
+        }
+
+        playerBullets.forEach(function(bullet) {
+            bullet.update();
+        });
+
+        playerBullets = playerBullets.filter(function(bullet) {
+            return bullet.active;
+        });
+
+
+        //Enemy Update logic
+        enemies.forEach(function(enemy) {
+            enemy.update();
+        });
+
+        enemies = enemies.filter(function(enemy) {
+            return enemy.active;
+        });
+
+        if (Math.random() < 0.1) {
+            enemies.push(Enemy());
+        }
+
+        //Handle Collision
+        handleCollisions();
+
+
+
+
+    }
+
+
+
+    if (currentState === states.End) {
+
+
+        endTextY = endTextY + 1;
+
+        if (endTextY >= 300) {
+
+            endTextY = 300;
+        }
+
+    }
+
+
+}
+
+function draw() { //Draws objects to the canvas
+
+    canvas.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+
+
+
+    if (currentState === states.splash) {
+
+        canvas.fillStyle = "#000"; // Set color to black
+        canvas.font = '25pt Calibri';
+        var SPLASH_SCREEN_TEXT = "Team Splash Screen";
+        splashTextX = canvas.measureText(SPLASH_SCREEN_TEXT).width;
+        canvas.fillText(SPLASH_SCREEN_TEXT, (CANVAS_WIDTH / 2) - (splashTextX / 2), splashTextY);
+
+    }
+
+
+    if (currentState === states.title) {
+
+        canvas.fillStyle = "#000"; // Set color to black
+        canvas.font = 'bold 40pt Calibri';
+        var GAME_NAME_TEXT = "GAME NAME";
+        gameTextx = canvas.measureText(GAME_NAME_TEXT).width; //Centers the text based on length
+        canvas.fillText(GAME_NAME_TEXT, (CANVAS_WIDTH / 2) - (gameTextx / 2) - 3, CANVAS_HEIGHT / 3);
+        //The next two create a special text effect
+        canvas.fillStyle = "#F00";
+        canvas.fillText(GAME_NAME_TEXT, (CANVAS_WIDTH / 2) - (gameTextx / 2), CANVAS_HEIGHT / 3);
+
+        canvas.fillStyle = "00F";
+        canvas.fillText(GAME_NAME_TEXT, (CANVAS_WIDTH / 2) - (gameTextx / 2) + 3, CANVAS_HEIGHT / 3);
+
+
+        canvas.fillStyle = "#F00";
+        canvas.font = 'bold 20pt Calibri';
+        var SPACEBAR_TEXT = "Press Space to Continue";
+        spaceBarTextx = canvas.measureText(SPACEBAR_TEXT).width; //Centers the text based on length
+        canvas.fillText(SPACEBAR_TEXT, (CANVAS_WIDTH / 2) - (spaceBarTextx / 2), CANVAS_HEIGHT - CANVAS_HEIGHT / 4);
+
+
+
+    }
+
+    if (currentState === states.Game) {
+        parallax.Draw(); //draw background
+        player.draw();
+
+
+        playerBullets.forEach(function(bullet) {
+            bullet.draw();
+        });
+
+
+        //Enemy Draw
+        enemies.forEach(function(enemy) {
+            enemy.draw();
+        });
+
+
+        //Life Bar top is pink static background
+        canvas.strokeRect(20, 20, 100 * 2, 10);
+        canvas.fillStyle = "#8B8989";
+        canvas.fillRect(20, 20, 100 * 2, 10);
+
+        //Second bar is red dynamic one
+        canvas.strokeRect(20, 20, 100 * 2, 10);
+        canvas.fillStyle = "#F00";
+        canvas.fillRect(20, 20, player.life * 2, 10);
+
+
+
+
+    }
+
+
+
+    if (currentState === states.End) {
+
+
+        canvas.fillStyle = "#F00"; // Set color to red
+        canvas.font = '25pt Calibri';
+
+        var GameOVER_TEXT = "Game Over";
+        endTextX = canvas.measureText(GameOVER_TEXT).width; //Centers the text based on length
+        //canvas.fillText(GameOVER_TEXT, (CANVAS_WIDTH/2) - (GameOVER_TEXTx/2) , CANVAS_HEIGHT-CANVAS_HEIGHT/4);
+
+        canvas.fillText(GameOVER_TEXT, (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY - 90);
+
+
+        canvas.fillStyle = "#000"; // Set color to black
+        canvas.font = '20pt Calibri';
+        endTextX = canvas.measureText("First Firstnameson").width;
+        canvas.fillText("First Firstnameson", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY - 45);
+
+
+        canvas.fillStyle = "#000"; // Set color to black
+        canvas.font = '20pt Calibri';
+        canvas.fillText("Second Secondton", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY);
+
+
+
+    }
+
+
+}
+	</script>
+</body>
+</html>
