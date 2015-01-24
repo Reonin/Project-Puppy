@@ -326,7 +326,7 @@ var player = {
 //Create The player2
 var player2 = {
     // color: "#00A",
-    sprite: Sprite("spaceship"),
+    sprite: Sprite("player"),
     x: 820,
     y: 680,
     width: 32,
@@ -467,7 +467,9 @@ function collides(a, b) {
 
 
 function handleCollisions() {
-    playerBullets.forEach(function(bullet) {
+
+
+    /*playerBullets.forEach(function(bullet) {
         enemies.forEach(function(enemy) {
             if (collides(bullet, enemy)) {
                 enemy.explode();
@@ -481,7 +483,13 @@ function handleCollisions() {
             enemy.explode();
             player.lifeChange(-10);
         }
-    });
+    });*/
+
+    if(collides(player, player2)){
+
+        console.log("Love at last");
+    }
+
 }
 
 /*** Parrallax background tutorial http://javacoffee.de/?p=866 **/
@@ -540,7 +548,7 @@ function ParallaxScrolling(canvas, imgdata) {
     }
 }
 
-var layer = new Array('images/fantasy_space.jpg', 'images/planet.png');
+var layer = new Array('images/gridback.png' /*,'images/planet.png'*/);
 var parallax = new ParallaxScrolling(canvas, layer);
 
 
