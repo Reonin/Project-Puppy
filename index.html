@@ -560,40 +560,16 @@ function update() { //Updates location and reaction of objects to the canvas
 
         player2.x = player2.x.clamp(0, CANVAS_WIDTH - player2.width); //prevents character from going past canvas
         player2.y = player2.y.clamp(0, CANVAS_HEIGHT - player2.height); //prevents character from going past canvas
-		
-        //Player actions
         if (keydown.space) {
-            player.shoot();
         }
 
-/*        playerBullets.forEach(function(bullet) {
-            bullet.update();
-        });
 
-        playerBullets = playerBullets.filter(function(bullet) {
-            return bullet.active;
-        });
-*/
 
-        //Enemy Update logic
-     /*   enemies.forEach(function(enemy) {
-            enemy.update();
-        });
 
-        enemies = enemies.filter(function(enemy) {
-            return enemy.active;
-        });
 
-        if (Math.random() < 0.1) {
-            enemies.push(Enemy());
         }
-*/
         //Handle Collision
         handleCollisions();
-
-
-
-
     }
 
 
