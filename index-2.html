@@ -13,8 +13,7 @@
 	<script src="libraries/howler.min.js" type="text/javascript"></script> <!-- Audio, https://github.com/goldfire/howler.js/ -->
 	<script src="libraries/jquery.hotkeys.js" type="text/javascript"></script> <!-- Keyboard mapping, https://github.com/tzuryby/jquery.hotkeys -->
 	<script src="libraries/sprite.js" type="text/javascript"></script> <!-- Sprite Mapping,  -->
-	<script src="libraries/map.js" type="text/javascript"></script> <!-- Sprite Mapping,  -->
-	<script src="libraries/tile.js" type="text/javascript"></script> 
+
 
 </head>
 
@@ -87,10 +86,9 @@ $(window).on('resize', function() {
     scaleToSmallest();
 });
 
-drawMap(canvas);
-
-
 // Game State 
+
+
 var states = {
     splash: 0,
     title: 1,
@@ -172,15 +170,16 @@ var endTextY = 0;
 
 //Sound creation
 var GameLoopMusic_sound = new Howl({
-    urls: ['sounds/gameplay_song.wav'],
+    urls: ['sounds/In-Orbit.mp3'],
     autoplay: true,
     loop: true,
 });
-var Lose = new Howl({
-    urls: ['sounds/dogs_lose.wav']
+var explosion_sound = new Howl({
+    urls: ['sounds/explosion.mp3', 'sounds/explosion.wav']
 });
-var Win = new Howl({
-    urls: ['sounds/dogs_win.wav'],
+var shoot_sound = new Howl({
+    urls: ['sounds/shoot.mp3', 'sounds/shoot.wav'],
+    volume: 0.2
 });
 
 //explosion_sound.play();
@@ -493,9 +492,6 @@ function onMouseMove(e) {
     //console.log('the mouse is at ' + xm + 'and' + ym);
 }
 
-//Draw the Array of maptiles
-
-
 function controller(){
      //Pause the game
     if (keydown.p) {
@@ -588,7 +584,8 @@ function update() { //Updates location and reaction of objects to the canvas
             player2.lightRadius++;
             
             // Update the timer
-            updateTimer(timerMaxVal + timerCurrVal);
+            updateTimer((timerMaxVal + timerCurrVal));
+			
         }
         else {
             if ( player.lightRadius > player.baseLightRadius ) {
@@ -696,12 +693,6 @@ function draw() { //Draws objects to the canvas
     if (currentState === states.Game) {
         parallax.Draw(); //draw background
 
-        //Tile draw
-
-        tileArray.forEach(function(tile){
-            tile.draw();
-        });
-
         // Draw the shadow above the background but below the players and UI elements
         // Create a canvas for the mask
         var shadowCanvas = document.createElement('canvas');
@@ -745,15 +736,13 @@ function draw() { //Draws objects to the canvas
 
         //Life Bar top is pink static background
         canvas.strokeRect(20, 20, 100 * 2, 10);
-        canvas.fillStyle = "#8B8989";
-        canvas.fillRect(20, 20, 100 * 2, 10);
+        canvas.fillStyle = "#66CCFF";
+        canvas.fillRect(20, 20, timerMaxVal, 10);
 
         //Second bar is red dynamic one
         canvas.strokeRect(20, 20, 100 * 2, 10);
-        canvas.fillStyle = "#F00";
+        canvas.fillStyle = "#FFCC00";
         canvas.fillRect(20, 20, timerMaxVal + timerCurrVal, 10);
-
-
 
 
     }
