@@ -452,6 +452,21 @@ function ParallaxScrolling(canvas, imgdata) {
 var layer = new Array('images/gridback.png' /*,'images/planet.png'*/);
 var parallax = new ParallaxScrolling(canvas, layer);
 
+//Timer
+var TimerInt;
+function countDown(i) {
+
+     timerInt = setInterval(function () {
+		if(i == 0){
+	console.log("TImes up");
+	}
+        console.log( "Number: " + i);
+        i-- || clearInterval(timerInt);  //if i is 0, then stop the interval
+    }, 1000);
+	
+}
+countDown(5);
+
 
 var text = null;
 var spot = null;
