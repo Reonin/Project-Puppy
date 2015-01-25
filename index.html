@@ -226,7 +226,7 @@ function animateSprite(object) {
     var newDateObj = new Date();
 
     if ( (newDateObj.getTime() - object.spriteLastTickTime) >= object.spriteCooldown ) {
-        if ( object.spriteIndex < ( object.sprite.length - 1) ) {
+        if ( object.spriteIndex < ( object.sprite.frames - 1) ) {
             object.spriteIndex++;
         }
         else {
@@ -241,15 +241,37 @@ function animateSprite(object) {
 //Create The player
 var player = {
     // color: "#00A",
-    sprite: [
-        Sprite("player1-sprite/player1-1"),
-        Sprite("player1-sprite/player1-2"),
-        Sprite("player1-sprite/player1-3"),
-        Sprite("player1-sprite/player1-4")
-    ],
+    sprite: {
+        frames: 4,
+        up: [
+            Sprite("player1-sprite/player1-u-1"),
+            Sprite("player1-sprite/player1-u-2"),
+            Sprite("player1-sprite/player1-u-3"),
+            Sprite("player1-sprite/player1-u-4")
+        ],
+        down: [
+            Sprite("player1-sprite/player1-d-1"),
+            Sprite("player1-sprite/player1-d-2"),
+            Sprite("player1-sprite/player1-d-3"),
+            Sprite("player1-sprite/player1-d-4")
+        ],
+        left: [
+            Sprite("player1-sprite/player1-l-1"),
+            Sprite("player1-sprite/player1-l-2"),
+            Sprite("player1-sprite/player1-l-3"),
+            Sprite("player1-sprite/player1-l-4")
+        ],
+        right: [
+            Sprite("player1-sprite/player1-r-1"),
+            Sprite("player1-sprite/player1-r-2"),
+            Sprite("player1-sprite/player1-r-3"),
+            Sprite("player1-sprite/player1-r-4")
+        ],
+    },
     spriteIndex: 0,
     spriteCooldown: 100,
     spriteLastTickTime: 0,
+    spriteDir: "up",
     x: P1_STARTX,
     y: P1_STARTY,
     velX: 0,
@@ -264,7 +286,7 @@ var player = {
     draw: function() {
         //canvas.fillStyle = this.color;
         // canvas.fillRect(this.x, this.y, this.width, this.height);
-        this.sprite[this.spriteIndex].draw(canvas, this.x, this.y);
+        this.sprite[this.spriteDir][this.spriteIndex].draw(canvas, this.x, this.y);
     },
     shoot: function() {
         var bulletPosition = this.midpoint();
@@ -307,15 +329,37 @@ var player = {
 //Create The player2
 var player2 = {
     // color: "#00A",
-    sprite: [
-        Sprite("player2-sprite/player2-1"),
-        Sprite("player2-sprite/player2-2"),
-        Sprite("player2-sprite/player2-3"),
-        Sprite("player2-sprite/player2-4")
-    ],
+    sprite: {
+        frames: 4,
+        up: [
+            Sprite("player2-sprite/player2-u-1"),
+            Sprite("player2-sprite/player2-u-2"),
+            Sprite("player2-sprite/player2-u-3"),
+            Sprite("player2-sprite/player2-u-4")
+        ],
+        down: [
+            Sprite("player2-sprite/player2-d-1"),
+            Sprite("player2-sprite/player2-d-2"),
+            Sprite("player2-sprite/player2-d-3"),
+            Sprite("player2-sprite/player2-d-4")
+        ],
+        left: [
+            Sprite("player2-sprite/player2-l-1"),
+            Sprite("player2-sprite/player2-l-2"),
+            Sprite("player2-sprite/player2-l-3"),
+            Sprite("player2-sprite/player2-l-4")
+        ],
+        right: [
+            Sprite("player2-sprite/player2-r-1"),
+            Sprite("player2-sprite/player2-r-2"),
+            Sprite("player2-sprite/player2-r-3"),
+            Sprite("player2-sprite/player2-r-4")
+        ],
+    },
     spriteIndex: 0,
     spriteCooldown: 100,
     spriteLastTickTime: 0,
+    spriteDir: "up",
     x: P2_STARTX,
     y: P2_STARTY,
     velX: 0,
@@ -330,7 +374,7 @@ var player2 = {
     draw: function() {
         //canvas.fillStyle = this.color;
         // canvas.fillRect(this.x, this.y, this.width, this.height);
-        this.sprite[this.spriteIndex].draw(canvas, this.x, this.y);
+        this.sprite[this.spriteDir][this.spriteIndex].draw(canvas, this.x, this.y);
     },
     shoot: function() {
         var bulletPosition = this.midpoint();
@@ -773,6 +817,7 @@ function update() { //Updates location and reaction of objects to the canvas
                 player.velX--;
             }
 
+            player.spriteDir = "left";
             animateSprite(player);
         }
 
@@ -781,6 +826,7 @@ function update() { //Updates location and reaction of objects to the canvas
                 player.velX++;
             }
 
+            player.spriteDir = "right";
             animateSprite(player);
         }
 		
@@ -789,6 +835,7 @@ function update() { //Updates location and reaction of objects to the canvas
                 player.velY--;
             }
 
+            player.spriteDir = "up";
             animateSprite(player);
         }
 
@@ -797,6 +844,7 @@ function update() { //Updates location and reaction of objects to the canvas
                 player.velY++;
             }
 
+            player.spriteDir = "down";
             animateSprite(player);
         }
 
@@ -806,6 +854,7 @@ function update() { //Updates location and reaction of objects to the canvas
                 player2.velX--;
             }
 
+            player2.spriteDir = "left";
             animateSprite(player2);
         }
 
@@ -814,6 +863,7 @@ function update() { //Updates location and reaction of objects to the canvas
                 player2.velX++;
             }
 
+            player2.spriteDir = "right";
             animateSprite(player2);
         }
 		
@@ -822,6 +872,7 @@ function update() { //Updates location and reaction of objects to the canvas
                 player2.velY--;
             }
 
+            player2.spriteDir = "up";
             animateSprite(player2);
         }
 
@@ -830,6 +881,7 @@ function update() { //Updates location and reaction of objects to the canvas
                 player2.velY++;
             }
 
+            player2.spriteDir = "down";
             animateSprite(player2);
         }
         //Handle Collision
