@@ -29,6 +29,7 @@
         width: 100%;
         height: 100%;
         margin: 0;
+        background-color: black;
     }
 
 	#GameCanvasScreen{
@@ -79,7 +80,7 @@ var shadowCanvas = document.createElement('canvas');
 var shadowCanvasCtx = shadowCanvas.getContext('2d');
 var timerCanvas = document.createElement('canvas');
 var timerCanvasCtx = timerCanvas.getContext('2d');
-
+canvas.globalAlpha = 1;
 function scaleToSmallest() {
     var ratio = CANVAS_WIDTH / CANVAS_HEIGHT;
 
@@ -104,7 +105,10 @@ var states = {
     splash: 0,
     title: 1,
     Game: 2,
-    End: 3
+    End: 3,
+    story: 4,
+    controls:5,
+    gameOver:6
 };
 var currentState = states.title;//states.splash;
 
@@ -204,6 +208,14 @@ heart_icon.src = 'images/heart_icon.png';
 var credImg1 = new Image();
 credImg1.src = 'images/dog-bone.png';
 
+var storyScreen = new Image();
+storyScreen.src = 'images/Story_1.png';
+
+var controlScreen = new Image();
+controlScreen.src = 'images/Info_Screen.png';
+
+
+
 //Sound creation
 var verifysound = 0;
 
@@ -224,12 +236,6 @@ var lose_sound = new Howl({
 });
 var win_sound = new Howl({
     urls: ['sounds/dogs_win.wav'],
-});
-var whine_fx = new Howl({
-    urls: ['sounds/fx/dogwhine.wav'],
-});
-var bark_fx = new Howl({
-    urls: ['sounds/fx/quickbarks.wav'],
 });
 
 function animateSprite(object) {
@@ -538,9 +544,7 @@ function handleCollisions() {
     if(collides(player, player2)){
 
         console.log("Love at last");
-		bark_fx.play();
-		win_sound.play();
-        //Add Win condition SOund - DONE
+        //Add Win condition SOund
     }
 
 
@@ -700,6 +704,24 @@ var spot = null;
 var box = null;
 var boxProperty = '';
 
+function fadeOut(){
+
+console.log("Triggers fade");
+
+
+var fading = setInterval(function(){
+    console.log("fading ");
+    canvas.globalAlpha = canvas.globalAlpha - 0.2;
+    console.log(canvas.globalAlpha);
+    if( canvas.globalAlpha <= 0.1){
+
+        clearInterval(fading);
+    }
+}, 1000)
+
+
+}
+
 function onMouseMove(e) {
     if (typeof e === 'undefined' || typeof e.clientX === 'undefined') {
         return;
@@ -782,12 +804,46 @@ function update() { //Updates location and reaction of objects to the canvas
 		}
 		
 		if (keydown.space) {
-            currentState = states.Game;
-			verifysound = 0;
-			menuloop_sound.stop();
+
+            setTimeout(function(){ currentState = states.story;
+            verifysound = 0;
+            menuloop_sound.stop();
+        }, 1000 );
+           
+
+
         }
 
 
+    }
+
+    if(currentState == states.story){
+
+        //Wrap this in a timer to prevent them from skipping 
+        if (keydown.space) {
+            setTimeout(function(){
+            currentState = states.controls;
+            //verifysound = 0;
+            //menuloop_sound.stop();
+              }, 1000 )
+        }
+        //load up the image
+        //play music
+        //allow space bar to shift to controls screen
+    }
+
+
+     if(currentState == states.controls){
+
+        if (keydown.space) {
+            currentState = states.Game;
+           // verifysound = 0;
+            //menuloop_sound.stop();
+        }
+
+        //load up the image
+        //play music
+        //allow space bar to shift to game screen
     }
 
 
@@ -798,11 +854,20 @@ function update() { //Updates location and reaction of objects to the canvas
             gameTry = gameTry - 1;
                 if(gameTry == 0){
 
-                    currentState = states.End;
-					lose_sound.play();
+
+                    fadeOut();
+
+                    setTimeout(function(){
+
+                        currentState = states.End;
+
+
+                     }, 3000)
+                    
+
+
                 }
-                whine_fx.play();
-				//Trigger Sound for death here - DONE
+                //Trigger Sound for death here
             timerCurrVal = timerMaxVal;
             player.x = P1_STARTX;
             player.y = P1_STARTY;
@@ -923,6 +988,7 @@ function update() { //Updates location and reaction of objects to the canvas
 
         var timerAccel= 1;
         
+        /*
         // Grow BOTH shadows on Space
         if (keydown.space) {
             player.lightRadius *= lightGrowRatio;
@@ -939,8 +1005,8 @@ function update() { //Updates location and reaction of objects to the canvas
             }
             // Update the timer
         }
+        */
 
-        /*
         // Grow shadows independently
         // player1 
         if (keydown["/"]) {
@@ -965,7 +1031,6 @@ function update() { //Updates location and reaction of objects to the canvas
                 player2.lightRadius *= lightDecayRatio;
             }
         }
-        */
 
         updateTimer(timerAccel);
     }
@@ -1029,15 +1094,38 @@ function draw() { //Draws objects to the canvas
         canvas.fillText(GAME_NAME_TEXT, (CANVAS_WIDTH / 2) - (gameTextx / 2) + 3, CANVAS_HEIGHT / 3);
 */
 
-        canvas.fillStyle = "#F00";
+        
+
+
+    }
+
+
+
+if(currentState == states.story){
+
+        canvas.drawImage(storyScreen, 0,0);
+
+       /* canvas.fillStyle = "#F00";
         canvas.font = 'bold 20pt Calibri';
         var SPACEBAR_TEXT = "Press Space to Continue";
         spaceBarTextx = canvas.measureText(SPACEBAR_TEXT).width; //Centers the text based on length
         canvas.fillText(SPACEBAR_TEXT, (CANVAS_WIDTH / 2) - (spaceBarTextx / 2), CANVAS_HEIGHT - CANVAS_HEIGHT / 4);
-
-
+*/
 
     }
+
+
+     if(currentState == states.controls){
+
+      canvas.drawImage(controlScreen, 0,0);
+
+        
+
+    }
+
+
+
+
 
     if (currentState === states.Game) {
         parallax.Draw(); //draw background
@@ -1118,9 +1206,9 @@ function draw() { //Draws objects to the canvas
         timerCanvas.height = 51;
         
         //edit the bar canvas.drawImage(img,sx,sy,swidth,sheight,x,y,width,height);
-        timerCanvasCtx.drawImage(timerBar, 0, 0, 330, 51);
+        timerCanvasCtx.drawImage(timerBar, 0, 10, 330, 30);
        // canvas.drawImage(imageObj, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
-        canvas.drawImage(timerCanvas, 10, 10);
+        canvas.drawImage(timerCanvas, 0, 0);
     
         if(gameTry >= 1){
             canvas.drawImage(heart_icon,CANVAS_WIDTH/2 + 720, 15, 70,55);
@@ -1133,53 +1221,72 @@ function draw() { //Draws objects to the canvas
        canvas.drawImage(heart_icon,CANVAS_WIDTH/2 +840,15, 70,55);
    }
 
+    if(gameTry == 0){
+
+        canvas.fillStyle = "#000";
+        canvas.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+        canvas.fillStyle = "#F00"; // Set color to red
+        canvas.font = '60pt Calibri';
+
+        var GameOVER_TEXT = "Game Over";
+        endTextX = canvas.measureText(GameOVER_TEXT).width; 
+
+        canvas.fillText(GameOVER_TEXT, (CANVAS_WIDTH / 2) ,  CANVAS_HEIGHT/2);
+    }
+
+
     }
 
 
 
     if (currentState === states.End) {
+        canvas.globalAlpha = 1;
+
+        canvas.fillStyle = "#000";
+        canvas.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
         canvas.fillStyle = "#F00"; // Set color to red
         canvas.font = '25pt Calibri';
 
-        var GameOVER_TEXT = "Game Over";
+        var GameOVER_TEXT = "Thanks for Playing";
         endTextX = canvas.measureText(GameOVER_TEXT).width; //Centers the text based on length
         //canvas.fillText(GameOVER_TEXT, (CANVAS_WIDTH/2) - (GameOVER_TEXTx/2) , CANVAS_HEIGHT-CANVAS_HEIGHT/4);
 
         canvas.fillText(GameOVER_TEXT, (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY - 90);
 
 
-        canvas.fillStyle = "#000"; // Set color to black
+        canvas.fillStyle = "#FFF"; // Set color to black
         canvas.font = '20pt Calibri';
         endTextX = canvas.measureText("Blake BS").width;
         canvas.fillText("Blake BS", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY - 45);
 
-        canvas.fillStyle = "#000"; // Set color to black
+        canvas.fillStyle = "#FFF"; // Set color to black
         canvas.font = '20pt Calibri';
         endTextX = canvas.measureText("Gil Chen").width;
         canvas.fillText("Gil Chen", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY);
 
-        canvas.fillStyle = "#000"; // Set color to black
+        canvas.fillStyle = "#FFF"; // Set color to black
         canvas.font = '20pt Calibri';
         endTextX = canvas.measureText("Ryan Giglio").width;
         canvas.fillText("Ryan Giglio", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY + 45);
 
-		canvas.fillStyle = "#000"; // Set color to black
+		canvas.fillStyle = "#FFF"; // Set color to black
         canvas.font = '20pt Calibri';
         endTextX = canvas.measureText("W.V. James").width;
 		canvas.fillText("W.V. James", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY + 90);
 
-		canvas.fillStyle = "#000"; // Set color to black
+		canvas.fillStyle = "#FFF"; // Set color to black
         canvas.font = '20pt Calibri';
         endTextX = canvas.measureText("Corey Jeffers").width;
         canvas.fillText("Corey Jeffers", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY + 135);
 
-		canvas.fillStyle = "#000"; // Set color to black
+		canvas.fillStyle = "#FFF"; // Set color to black
         canvas.font = '20pt Calibri';
         endTextX = canvas.measureText("Pedro Mont").width;
 		canvas.fillText("Pedro Mont", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY + 180);
 
-		canvas.fillStyle = "#000"; // Set color to black
+		canvas.fillStyle = "#FFF"; // Set color to black
         canvas.font = '20pt Calibri';
         endTextX = canvas.measureText("Michael Parker").width;
         canvas.fillText("Michael Parker", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY + 225);
@@ -1190,7 +1297,7 @@ function draw() { //Draws objects to the canvas
         canvas.drawImage(credImg1,CANVAS_WIDTH/2 - (endTextX / 2) , endTextY + 500, 140,55);
 
 
-        canvas.fillStyle = "#000"; // Set color to black
+        canvas.fillStyle = "#FFF"; // Set color to black
         canvas.font = '40pt Calibri';
         endTextX = canvas.measureText("Credits").width;
         canvas.fillText("Credits", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY + 635);
