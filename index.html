@@ -197,8 +197,8 @@ splashScreen.src = 'images/opening-screen.png';
 var timerBar = new Image();
 timerBar.src = 'images/Bar.png';
 
-var dogBone = new Image();
-dogBone.src = 'images/dog-bone.png';
+var heart_icon = new Image();
+heart_icon.src = 'images/heart_icon.png';
 
 //End Portraits
 var credImg1 = new Image();
@@ -1109,19 +1109,19 @@ function draw() { //Draws objects to the canvas
         timerCanvas.height = 51;
         
         //edit the bar canvas.drawImage(img,sx,sy,swidth,sheight,x,y,width,height);
-        timerCanvasCtx.drawImage(timerBar, 0, 0, 330, 51);
+        timerCanvasCtx.drawImage(timerBar, 0, 10, 330, 30);
        // canvas.drawImage(imageObj, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
         canvas.drawImage(timerCanvas, 0, 0);
     
         if(gameTry >= 1){
-            canvas.drawImage(dogBone,CANVAS_WIDTH/2 + 560, 0, 120,55);
+            canvas.drawImage(heart_icon,CANVAS_WIDTH/2 + 720, 15, 70,55);
         }
        
         if(gameTry >= 2){
-       canvas.drawImage(dogBone,CANVAS_WIDTH/2 + 680,0, 120,55);
+       canvas.drawImage(heart_icon,CANVAS_WIDTH/2 + 780,15, 70,55);
     }
      if(gameTry >= 3){
-       canvas.drawImage(dogBone,CANVAS_WIDTH/2 +800,0, 120,55);
+       canvas.drawImage(heart_icon,CANVAS_WIDTH/2 +840,15, 70,55);
    }
 
     }
