@@ -62,7 +62,7 @@ function updateTimer(accelVal) {
     // If the "tick difference" has passed
     if ( (newDateObj.getTime() - lastTime) >= (timerTickDifference / accelVal) ) {
         timerCurrVal -= timerTickAmount;
-        console.log(timerCurrVal);
+        //console.log(timerCurrVal);
         lastTime = newDateObj.getTime();
     }
 }
@@ -185,7 +185,7 @@ var menuloop_sound = new Howl({
     loop: true,
 });
 var creditloop_sound = new Howl({
-    urls: ['sounds/credits.mp3'],
+    urls: ['sounds/credits_song.mp3'],
     loop: true,
 });
 var lose_sound = new Howl({
@@ -224,8 +224,8 @@ var player = {
     spriteIndex: 0,
     spriteCooldown: 100,
     spriteLastTickTime: 0,
-    x: 220,
-    y: 680,
+    x: 70,
+    y: 70,
     velX: 0,
     velY: 0,
     speed: 5,
@@ -290,8 +290,8 @@ var player2 = {
     spriteIndex: 0,
     spriteCooldown: 100,
     spriteLastTickTime: 0,
-    x: 820,
-    y: 680,
+    x: 1920 - 60 - 32 - 10,
+    y: 1080 - 60 - 32 - 10,
     velX: 0,
     velY: 0,
     speed: 5,
@@ -459,6 +459,87 @@ function handleCollisions() {
         console.log("Love at last");
     }
 
+
+    tileArray.forEach(function(tile) {
+
+
+        if(tile.type == "wall"){
+
+        if (collides(tile, player)) {
+            //console.log(tile);
+            if(player.velX < 0 ){
+                if(player.x > tile.x){
+                console.log("left stop");
+                player.velX = 0;
+            }
+            }
+
+            if(player.velX > 0 ){
+                if(player.x < tile.x){
+                console.log("right stop");
+                player.velX = 0;
+            }
+            }
+
+
+            if(player.velY < 0 ){
+                if(player.y > tile.y){
+                console.log("up stop");
+                player.velY = 0;
+            }
+            }
+
+            if(player.velY > 0 ){
+                  if(player.y < tile.y){
+                console.log("down stop");
+                player.velY = 0;
+            }
+            }
+            console.log("IM STUCK");
+            //tile.explode();
+           // player.lifeChange(-10);
+        }
+
+        //Player 2 collides with tile
+        if (collides(tile, player2)) {
+            //console.log(tile);
+            if(player2.velX < 0 ){
+                if(player2.x > tile.x){
+                console.log("left stop");
+                player2.velX = 0;
+            }
+            }
+
+            if(player.velX > 0 ){
+                if(player2.x < tile.x){
+                console.log("right stop");
+                player2.velX = 0;
+            }
+            }
+
+
+            if(player2.velY < 0 ){
+                if(player2.y > tile.y){
+                console.log("up stop");
+                player2.velY = 0;
+            }
+            }
+
+            if(player2.velY > 0 ){
+                  if(player2.y < tile.y){
+                console.log("down stop");
+                player2.velY = 0;
+            }
+            }
+            console.log("Player two is STUCK");
+            //tile.explode();
+           // player.lifeChange(-10);
+        }
+
+}
+
+    });
+
 }
 
 /*** Parrallax background tutorial http://javacoffee.de/?p=866 **/
@@ -516,7 +597,7 @@ function ParallaxScrolling(canvas, imgdata) {
     }
 }
 
-var layer = new Array('images/gridback.png' /*,'images/planet.png'*/);
+var layer = new Array('images/first-level.png' /*,'images/planet.png'*/);
 var parallax = new ParallaxScrolling(canvas, layer);
 
 var text = null;
@@ -640,15 +721,7 @@ function update() { //Updates location and reaction of objects to the canvas
             animateSprite(player);
         }
 
-        player.velX *= player.friction;
-        player.x += player.velX;
-        player.velY *= player.friction;
-        player.y += player.velY;
-
-        player.x = player.x.clamp(0, CANVAS_WIDTH - player.width); //prevents character from going past canvas
-        player.y = player.y.clamp(0, CANVAS_HEIGHT - player.height); //prevents character from going past canvas
-		
-		//Player2 Movement Controls
+       //Player2 Movement Controls
         if (keydown.a) {
             if ( player2.velX > -player2.speed ) {
                 player2.velX--;
@@ -680,6 +753,18 @@ function update() { //Updates location and reaction of objects to the canvas
 
             animateSprite(player2);
         }
+        //Handle Collision
+        handleCollisions();
+
+        player.velX *= player.friction;
+        player.x += player.velX;
+        player.velY *= player.friction;
+        player.y += player.velY;
+
+        player.x = player.x.clamp(0, CANVAS_WIDTH - player.width); //prevents character from going past canvas
+        player.y = player.y.clamp(0, CANVAS_HEIGHT - player.height); //prevents character from going past canvas
+        
+        
 
         player2.velX *= player2.friction;
         player2.x += player2.velX;
@@ -690,6 +775,7 @@ function update() { //Updates location and reaction of objects to the canvas
         player2.y = player2.y.clamp(0, CANVAS_HEIGHT - player2.height); //prevents character from going past canvas
 
         
+        /*
         // Grow BOTH shadows on Space
         if (keydown.space) {
             player.lightRadius++;
@@ -708,14 +794,15 @@ function update() { //Updates location and reaction of objects to the canvas
             // Update the timer
             updateTimer(1);
         }
+        */
 
         // Grow shadows independently
-
         // player1 
         if (keydown["/"]) {
             player.lightRadius++;
 
-            // TODO: Accelerate the timer
+            // Update the timer
+            updateTimer(3);
         }
         else {
             if ( player.lightRadius > player.baseLightRadius ) {
@@ -727,7 +814,7 @@ function update() { //Updates location and reaction of objects to the canvas
         if (keydown.e) {
             player2.lightRadius++;
 
-            // TODO: Accelerate the timer
+            updateTimer(3);
         }
         else {
             if ( player2.lightRadius > player2.baseLightRadius ) {
@@ -735,24 +822,23 @@ function update() { //Updates location and reaction of objects to the canvas
             }
         }
 		
-        //Handle Collision
-        handleCollisions();
-		//
-		if(timerCurrVal <= 0){
-		currentState = states.End;
-	}
+        
     }
 
-	
+
 
     if (currentState === states.End) {
 
-
+		if (verifysound == 0)  {
+		creditloop_sound.play(); // check if needs to be stopped when going back to game / title state
+		verifysound = 1;
+		}
+	
         endTextY = endTextY + 1;
 
-        if (endTextY >= 300) {
+        if (endTextY >= 400) {
 
-            endTextY = 300;
+            endTextY = 400;
         }
 
     }
@@ -816,7 +902,7 @@ function draw() { //Draws objects to the canvas
         // Draw the shadow above the background but below the players and UI elements
 
         // Set it to the size of the main canvas
-        shadowCanvas.width = canvasElement.get(0).width;
+    /*    shadowCanvas.width = canvasElement.get(0).width;
         shadowCanvas.height = canvasElement.get(0).height;
         // Fill the mask with black
         shadowCanvasCtx.fillStyle = "black";
@@ -842,7 +928,7 @@ function draw() { //Draws objects to the canvas
 
         // Draw the shadow layer on the canvas
         canvas.drawImage(shadowCanvas, 0, 0);
-
+*/
         player.draw();
 		player2.draw();
 
@@ -865,7 +951,10 @@ function draw() { //Draws objects to the canvas
         //Second bar is red dynamic one
         canvas.strokeRect(20, 20, 100 * 2, 10);
         canvas.fillStyle = "#F00";
-        canvas.fillRect(20, 20, timerCurrVal * 2, 10);
+        canvas.fillRect(20, 20, timerMaxVal + timerCurrVal, 10);
+
+
+
 
     }
 
@@ -885,17 +974,40 @@ function draw() { //Draws objects to the canvas
 
         canvas.fillStyle = "#000"; // Set color to black
         canvas.font = '20pt Calibri';
-        endTextX = canvas.measureText("First Firstnameson").width;
-        canvas.fillText("First Firstnameson", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY - 45);
-
+        endTextX = canvas.measureText("Blake BS").width;
+        canvas.fillText("Blake BS", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY - 45);
 
         canvas.fillStyle = "#000"; // Set color to black
         canvas.font = '20pt Calibri';
-        canvas.fillText("Second Secondton", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY);
+        endTextX = canvas.measureText("Gil Chen").width;
+        canvas.fillText("Gil Chen", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY);
 
+        canvas.fillStyle = "#000"; // Set color to black
+        canvas.font = '20pt Calibri';
+        endTextX = canvas.measureText("Ryan Giglio").width;
+        canvas.fillText("Ryan Giglio", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY + 45);
 
+		canvas.fillStyle = "#000"; // Set color to black
+        canvas.font = '20pt Calibri';
+        endTextX = canvas.measureText("W.V. James").width;
+		canvas.fillText("W.V. James", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY + 90);
 
-    }
+		canvas.fillStyle = "#000"; // Set color to black
+        canvas.font = '20pt Calibri';
+        endTextX = canvas.measureText("Corey Jeffers").width;
+        canvas.fillText("Corey Jeffers", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY + 135);
+
+		canvas.fillStyle = "#000"; // Set color to black
+        canvas.font = '20pt Calibri';
+        endTextX = canvas.measureText("Pedro Mont").width;
+		canvas.fillText("Pedro Mont", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY + 180);
+
+		canvas.fillStyle = "#000"; // Set color to black
+        canvas.font = '20pt Calibri';
+        endTextX = canvas.measureText("Michael Parker").width;
+        canvas.fillText("Michael Parker", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY + 225);
+		
+	}
 
 
 }
