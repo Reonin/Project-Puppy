@@ -108,7 +108,8 @@ var states = {
     End: 3,
     story: 4,
     controls:5,
-    gameOver:6
+    gameOver:6,
+    story2: 7
 };
 var currentState = states.title;//states.splash;
 
@@ -210,6 +211,9 @@ credImg1.src = 'images/dog-bone.png';
 
 var storyScreen = new Image();
 storyScreen.src = 'images/Story_1.png';
+
+var storyScreen2 = new Image();
+storyScreen2.src = 'images/Story_2.png';
 
 var controlScreen = new Image();
 controlScreen.src = 'images/Info_Screen.png';
@@ -826,6 +830,22 @@ function update() { //Updates location and reaction of objects to the canvas
         //Wrap this in a timer to prevent them from skipping 
         if (keydown.space) {
             setTimeout(function(){
+            currentState = states.story2;
+            //verifysound = 0;
+            //menuloop_sound.stop();
+              }, 200 )
+        }
+        //load up the image
+        //play music
+        //allow space bar to shift to controls screen
+    }
+
+
+if(currentState == states.story2){
+
+        //Wrap this in a timer to prevent them from skipping 
+        if (keydown.space) {
+            setTimeout(function(){
             currentState = states.controls;
             //verifysound = 0;
             //menuloop_sound.stop();
@@ -1118,6 +1138,21 @@ if(currentState == states.story){
 */
 
     }
+
+
+    if(currentState == states.story2){
+
+        canvas.drawImage(storyScreen2, 0,0);
+
+       /* canvas.fillStyle = "#F00";
+        canvas.font = 'bold 20pt Calibri';
+        var SPACEBAR_TEXT = "Press Space to Continue";
+        spaceBarTextx = canvas.measureText(SPACEBAR_TEXT).width; //Centers the text based on length
+        canvas.fillText(SPACEBAR_TEXT, (CANVAS_WIDTH / 2) - (spaceBarTextx / 2), CANVAS_HEIGHT - CANVAS_HEIGHT / 4);
+*/
+
+    }
+
 
 
      if(currentState == states.controls){
