@@ -816,14 +816,15 @@ function update() { //Updates location and reaction of objects to the canvas
 		
 		if (verifysound == 0)  {
 		menuloop_sound.play();
+		volume:0.7
 		verifysound = 1;
 		}
 		
 		if (keydown.space) {
 
             setTimeout(function(){ currentState = states.story;
-            verifysound = 0;
-            menuloop_sound.stop();
+           // verifysound = 0;
+           // menuloop_sound.stop();
         }, 200 );
            
 
@@ -855,8 +856,8 @@ if(currentState == states.story2){
         if (keydown.space) {
             setTimeout(function(){
             currentState = states.controls;
-            //verifysound = 0;
-            //menuloop_sound.stop();
+            verifysound = 0;
+            menuloop_sound.stop();
               }, 200 )
         }
         //load up the image
@@ -868,8 +869,8 @@ if(currentState == states.story2){
 
         if (keydown.space) {
             currentState = states.Game;
-           // verifysound = 0;
-            //menuloop_sound.stop();
+           verifysound = 0;
+           menuloop_sound.stop();
         }
 
         //load up the image
