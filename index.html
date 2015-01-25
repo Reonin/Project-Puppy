@@ -185,7 +185,7 @@ var menuloop_sound = new Howl({
     loop: true,
 });
 var creditloop_sound = new Howl({
-    urls: ['sounds/credits.mp3'],
+    urls: ['sounds/credits_song.mp3'],
     loop: true,
 });
 var lose_sound = new Howl({
@@ -829,12 +829,16 @@ function update() { //Updates location and reaction of objects to the canvas
 
     if (currentState === states.End) {
 
-
+		if (verifysound == 0)  {
+		creditloop_sound.play(); // check if needs to be stopped when going back to game / title state
+		verifysound = 1;
+		}
+	
         endTextY = endTextY + 1;
 
-        if (endTextY >= 300) {
+        if (endTextY >= 400) {
 
-            endTextY = 300;
+            endTextY = 400;
         }
 
     }
@@ -970,17 +974,40 @@ function draw() { //Draws objects to the canvas
 
         canvas.fillStyle = "#000"; // Set color to black
         canvas.font = '20pt Calibri';
-        endTextX = canvas.measureText("First Firstnameson").width;
-        canvas.fillText("First Firstnameson", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY - 45);
-
+        endTextX = canvas.measureText("Blake BS").width;
+        canvas.fillText("Blake BS", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY - 45);
 
         canvas.fillStyle = "#000"; // Set color to black
         canvas.font = '20pt Calibri';
-        canvas.fillText("Second Secondton", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY);
+        endTextX = canvas.measureText("Gil Chen").width;
+        canvas.fillText("Gil Chen", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY);
 
+        canvas.fillStyle = "#000"; // Set color to black
+        canvas.font = '20pt Calibri';
+        endTextX = canvas.measureText("Ryan Giglio").width;
+        canvas.fillText("Ryan Giglio", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY + 45);
 
+		canvas.fillStyle = "#000"; // Set color to black
+        canvas.font = '20pt Calibri';
+        endTextX = canvas.measureText("W.V. James").width;
+		canvas.fillText("W.V. James", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY + 90);
 
-    }
+		canvas.fillStyle = "#000"; // Set color to black
+        canvas.font = '20pt Calibri';
+        endTextX = canvas.measureText("Corey Jeffers").width;
+        canvas.fillText("Corey Jeffers", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY + 135);
+
+		canvas.fillStyle = "#000"; // Set color to black
+        canvas.font = '20pt Calibri';
+        endTextX = canvas.measureText("Pedro Mont").width;
+		canvas.fillText("Pedro Mont", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY + 180);
+
+		canvas.fillStyle = "#000"; // Set color to black
+        canvas.font = '20pt Calibri';
+        endTextX = canvas.measureText("Michael Parker").width;
+        canvas.fillText("Michael Parker", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY + 225);
+		
+	}
 
 
 }
