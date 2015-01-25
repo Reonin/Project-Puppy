@@ -53,8 +53,10 @@ var timerMaxVal = 600;
 var timerCurrVal = timerMaxVal; //Game Over COndition
 var timerTickAmount = 1;
 var timerTickDifference = 100;
-
 var lastTime;
+var lightOnTimerAccel = 3;
+var lightGrowRatio = 1.01;
+var lightDecayRatio = .95;
 
 //Life System
 var gameTry = 3;
@@ -849,53 +851,53 @@ function update() { //Updates location and reaction of objects to the canvas
         player2.x = player2.x.clamp(0, CANVAS_WIDTH - player2.width); //prevents character from going past canvas
         player2.y = player2.y.clamp(0, CANVAS_HEIGHT - player2.height); //prevents character from going past canvas
 
+        var timerAccel= 1;
         
-        
+        /*
         // Grow BOTH shadows on Space
         if (keydown.space) {
-            player.lightRadius++;
-            player2.lightRadius++;
+            player.lightRadius *= lightGrowRatio;
+            player2.lightRadius *= lightGrowRatio;
             
-            // Update the timer
-            updateTimer(timerMaxVal + timerCurrVal);
+            timerAccel += (lightOnTimerAccel * 2);
         }
         else {
             if ( player.lightRadius > player.baseLightRadius ) {
-                player.lightRadius--;
+                player.lightRadius *= lightDecayRatio;
             }
             if ( player2.lightRadius > player2.baseLightRadius ) {
-                player2.lightRadius--;
+                player2.lightRadius *= lightDecayRatio;
             }
             // Update the timer
-            updateTimer(1);
         }
-        
+        */
 
         // Grow shadows independently
         // player1 
         if (keydown["/"]) {
-            player.lightRadius += 4;
+            player.lightRadius *= lightGrowRatio;
 
-            // Update the timer
-            updateTimer(3);
+            timerAccel += lightOnTimerAccel;
         }
         else {
             if ( player.lightRadius > player.baseLightRadius ) {
-                player.lightRadius -= 8;
+                player.lightRadius *= lightDecayRatio;
             }
         }
 
         // player2 
         if (keydown.e) {
-            player2.lightRadius += 4;
+            player2.lightRadius *= lightGrowRatio;
 
-            updateTimer(3);
+            timerAccel += lightOnTimerAccel;
         }
         else {
             if ( player2.lightRadius > player2.baseLightRadius ) {
-                player2.lightRadius -= 8;
+                player2.lightRadius *= lightDecayRatio;
             }
         }
+
+        updateTimer(timerAccel);
     }
 
 
