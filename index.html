@@ -1005,8 +1005,8 @@ function update() { //Updates location and reaction of objects to the canvas
             }
             // Update the timer
         }
-        */
 
+        /*
         // Grow shadows independently
         // player1 
         if (keydown["/"]) {
@@ -1031,6 +1031,7 @@ function update() { //Updates location and reaction of objects to the canvas
                 player2.lightRadius *= lightDecayRatio;
             }
         }
+        */
 
         updateTimer(timerAccel);
     }
@@ -1206,9 +1207,9 @@ if(currentState == states.story){
         timerCanvas.height = 51;
         
         //edit the bar canvas.drawImage(img,sx,sy,swidth,sheight,x,y,width,height);
-        timerCanvasCtx.drawImage(timerBar, 0, 10, 330, 30);
+        timerCanvasCtx.drawImage(timerBar, 0, 0, 330, 51);
        // canvas.drawImage(imageObj, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
-        canvas.drawImage(timerCanvas, 0, 0);
+        canvas.drawImage(timerCanvas, 10, 10);
     
         if(gameTry >= 1){
             canvas.drawImage(heart_icon,CANVAS_WIDTH/2 + 720, 15, 70,55);
