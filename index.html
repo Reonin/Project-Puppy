@@ -810,30 +810,28 @@ function update() { //Updates location and reaction of objects to the canvas
         // Grow shadows independently
         // player1 
         if (keydown["/"]) {
-            player.lightRadius++;
+            player.lightRadius += 4;
 
             // Update the timer
             updateTimer(3);
         }
         else {
             if ( player.lightRadius > player.baseLightRadius ) {
-                player.lightRadius--;
+                player.lightRadius -= 8;
             }
         }
 
         // player2 
         if (keydown.e) {
-            player2.lightRadius++;
+            player2.lightRadius += 4;
 
             updateTimer(3);
         }
         else {
             if ( player2.lightRadius > player2.baseLightRadius ) {
-                player2.lightRadius--;
+                player2.lightRadius -= 8;
             }
         }
-		
-        
     }
 
 
