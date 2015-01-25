@@ -690,6 +690,7 @@ function update() { //Updates location and reaction of objects to the canvas
         player2.y = player2.y.clamp(0, CANVAS_HEIGHT - player2.height); //prevents character from going past canvas
 
         
+        /*
         // Grow BOTH shadows on Space
         if (keydown.space) {
             player.lightRadius++;
@@ -708,14 +709,15 @@ function update() { //Updates location and reaction of objects to the canvas
             // Update the timer
             updateTimer(1);
         }
+        */
 
         // Grow shadows independently
-
         // player1 
         if (keydown["/"]) {
             player.lightRadius++;
 
-            // TODO: Accelerate the timer
+            // Update the timer
+            updateTimer(3);
         }
         else {
             if ( player.lightRadius > player.baseLightRadius ) {
@@ -727,7 +729,7 @@ function update() { //Updates location and reaction of objects to the canvas
         if (keydown.e) {
             player2.lightRadius++;
 
-            // TODO: Accelerate the timer
+            updateTimer(3);
         }
         else {
             if ( player2.lightRadius > player2.baseLightRadius ) {
