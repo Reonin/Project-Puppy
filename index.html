@@ -54,8 +54,8 @@ var timerCurrVal = timerMaxVal; //Game Over COndition
 var timerTickAmount = 1;
 var timerTickDifference = 100;
 var lastTime;
-var lightOnTimerAccel = 3;
-var lightGrowRatio = 1.01;
+var lightOnTimerAccel = 2;
+var lightGrowRatio = 1.02;
 var lightDecayRatio = .95;
 
 //Life System
@@ -179,10 +179,10 @@ Number.prototype.clamp = function(min, max) {
 };
 
 
-var P1_STARTX = 70;
-var P1_STARTY = 70;
-var P2_STARTX = 1920 - 120;
-var P2_STARTY = 1080 - 60 - 32 - 10;
+var P1_STARTX = 1920 - 120;
+var P1_STARTY = 1080 - 60 - 32 - 10;
+var P2_STARTX = 70;
+var P2_STARTY = 70;
 
 //Text Variables
 var splashTextX = CANVAS_WIDTH / 3;
@@ -287,7 +287,7 @@ var player = {
     y: P1_STARTY,
     velX: 0,
     velY: 0,
-    speed: 5,
+    speed: 4,
     friction: 0.85,
     width: 32,
     height: 32,
@@ -375,7 +375,7 @@ var player2 = {
     y: P2_STARTY,
     velX: 0,
     velY: 0,
-    speed: 5,
+    speed: 4,
     friction: 0.85,
     width: 32,
     height: 32,
@@ -730,7 +730,6 @@ function onMouseMove(e) {
       var mouse_x = 0;
       var mouse_y;
  $("#GameCanvasScreen").mousemove( function(evt){
-    mouse_x = evt.result;
     mouse_x = evt.clientX - evt.pageX
     //var rect = canvas.getBoundingClientRect();
     //console.log(evt.clientX - evt.pageX);
