@@ -241,6 +241,13 @@ var lose_sound = new Howl({
 var win_sound = new Howl({
     urls: ['sounds/dogs_win.wav'],
 });
+var whine_fx = new Howl({
+    urls: ['sounds/fx/dogwhine.wav'],
+});
+var bark_fx = new Howl({
+    urls: ['sounds/fx/quickbarks.wav'],
+});
+
 
 function animateSprite(object) {
     // Sprite walk cycle
@@ -550,7 +557,9 @@ function handleCollisions() {
     if(collides(player, player2)){
 
         console.log("Love at last");
-        //Add Win condition SOund
+		bark_fx.play();
+		win_sound.play();
+        //Add Win condition SOund - DONE
 
         currentState = states.End;
     }
@@ -883,14 +892,16 @@ if(currentState == states.story2){
                     setTimeout(function(){
 
                         currentState = states.End;
-
+						lose_sound.play();
 
                      }, 3000)
                     
 
 
                 }
-                //Trigger Sound for death here
+                
+				whine_fx.play();
+				//Trigger Sound for death here - DONE
             timerCurrVal = timerMaxVal;
             player.x = P1_STARTX;
             player.y = P1_STARTY;
