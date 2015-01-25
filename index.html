@@ -299,6 +299,7 @@ var player = {
     height: 32,
     life: 100,
     baseLightRadius: 90,
+    maxLightRadius: 1200,
     lightRadius: 90,
     draw: function() {
         //canvas.fillStyle = this.color;
@@ -387,6 +388,7 @@ var player2 = {
     height: 32,
     life: 100,
     baseLightRadius: 90,
+    maxLightRadius: 1200,
     lightRadius: 90,
     draw: function() {
         //canvas.fillStyle = this.color;
@@ -832,7 +834,6 @@ function update() { //Updates location and reaction of objects to the canvas
         //allow space bar to shift to controls screen
     }
 
-
      if(currentState == states.controls){
 
         if (keydown.space) {
@@ -988,11 +989,12 @@ function update() { //Updates location and reaction of objects to the canvas
 
         var timerAccel= 1;
         
-        /*
         // Grow BOTH shadows on Space
         if (keydown.space) {
-            player.lightRadius *= lightGrowRatio;
-            player2.lightRadius *= lightGrowRatio;
+            if (player.lightRadius < player.maxLightRadius ) {
+                player.lightRadius *= lightGrowRatio;
+                player2.lightRadius *= lightGrowRatio;
+            }
             
             timerAccel += (lightOnTimerAccel * 2);
         }
