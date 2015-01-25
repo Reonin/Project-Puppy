@@ -225,6 +225,9 @@ var lose_sound = new Howl({
 var win_sound = new Howl({
     urls: ['sounds/dogs_win.wav'],
 });
+var whine_fx = new Howl({
+    urls: ['sounds/fx/dogwhine.wav'],
+});
 
 function animateSprite(object) {
     // Sprite walk cycle
@@ -792,8 +795,10 @@ function update() { //Updates location and reaction of objects to the canvas
                 if(gameTry == 0){
 
                     currentState = states.End;
+					lose_sound.play();
                 }
-                //Trigger Sound for death here
+                whine_fx.play();
+				//Trigger Sound for death here - DONE
             timerCurrVal = timerMaxVal;
             player.x = P1_STARTX;
             player.y = P1_STARTY;
