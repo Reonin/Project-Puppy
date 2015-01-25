@@ -285,34 +285,26 @@ function animateSprite(object) {
 var player = {
     // color: "#00A",
     sprite: {
-        frames: 4,
+        frames: 2,
         up: [
-            Sprite("player1-sprite/player1-u-1"),
-            Sprite("player1-sprite/player1-u-2"),
-            Sprite("player1-sprite/player1-u-3"),
-            Sprite("player1-sprite/player1-u-4")
+            Sprite("player1-sprite/_0000s_0002_Rex_up_1"),
+            Sprite("player1-sprite/_0000s_0003_Rex_up_2")
         ],
         down: [
-            Sprite("player1-sprite/player1-d-1"),
-            Sprite("player1-sprite/player1-d-2"),
-            Sprite("player1-sprite/player1-d-3"),
-            Sprite("player1-sprite/player1-d-4")
+            Sprite("player1-sprite/_0000s_0006_Rex_Down_1"),
+            Sprite("player1-sprite/_0000s_0007_Rex_Down_2")
         ],
         left: [
-            Sprite("player1-sprite/player1-l-1"),
-            Sprite("player1-sprite/player1-l-2"),
-            Sprite("player1-sprite/player1-l-3"),
-            Sprite("player1-sprite/player1-l-4")
+            Sprite("player1-sprite/_0000s_0004_Rex_left_1"),
+            Sprite("player1-sprite/_0000s_0005_Rex_Left_2")
         ],
         right: [
-            Sprite("player1-sprite/player1-r-1"),
-            Sprite("player1-sprite/player1-r-2"),
-            Sprite("player1-sprite/player1-r-3"),
-            Sprite("player1-sprite/player1-r-4")
+            Sprite("player1-sprite/_0000s_0000_Rex_right_1"),
+            Sprite("player1-sprite/_0000s_0001_Rex_right_2")
         ],
     },
     spriteIndex: 0,
-    spriteCooldown: 100,
+    spriteCooldown: 200,
     spriteLastTickTime: 0,
     spriteDir: "up",
     x: P1_STARTX,
@@ -321,8 +313,8 @@ var player = {
     velY: 0,
     speed: 4,
     friction: 0.85,
-    width: 32,
-    height: 32,
+    width: 40,
+    height: 40,
     life: 100,
     baseLightRadius: 90,
     maxLightRadius: 1200,
@@ -374,34 +366,26 @@ var player = {
 var player2 = {
     // color: "#00A",
     sprite: {
-        frames: 4,
+        frames: 2,
         up: [
-            Sprite("player2-sprite/player2-u-1"),
-            Sprite("player2-sprite/player2-u-2"),
-            Sprite("player2-sprite/player2-u-3"),
-            Sprite("player2-sprite/player2-u-4")
+            Sprite("player2-sprite/_0000s_0010_Up_1"),
+            Sprite("player2-sprite/_0000s_0011_Up_2")
         ],
         down: [
-            Sprite("player2-sprite/player2-d-1"),
-            Sprite("player2-sprite/player2-d-2"),
-            Sprite("player2-sprite/player2-d-3"),
-            Sprite("player2-sprite/player2-d-4")
+            Sprite("player2-sprite/_0000s_0014_Down_1"),
+            Sprite("player2-sprite/_0000s_0015_Down_2")
         ],
         left: [
-            Sprite("player2-sprite/player2-l-1"),
-            Sprite("player2-sprite/player2-l-2"),
-            Sprite("player2-sprite/player2-l-3"),
-            Sprite("player2-sprite/player2-l-4")
+            Sprite("player2-sprite/_0000s_0012_Left_1"),
+            Sprite("player2-sprite/_0000s_0013_Left_2")
         ],
         right: [
-            Sprite("player2-sprite/player2-r-1"),
-            Sprite("player2-sprite/player2-r-2"),
-            Sprite("player2-sprite/player2-r-3"),
-            Sprite("player2-sprite/player2-r-4")
+            Sprite("player2-sprite/_0000s_0008_Right_1"),
+            Sprite("player2-sprite/_0000s_0009_Right_2")
         ],
     },
     spriteIndex: 0,
-    spriteCooldown: 100,
+    spriteCooldown: 200,
     spriteLastTickTime: 0,
     spriteDir: "up",
     x: P2_STARTX,
@@ -410,8 +394,8 @@ var player2 = {
     velY: 0,
     speed: 4,
     friction: 0.85,
-    width: 32,
-    height: 32,
+    width: 40,
+    height: 40,
     life: 100,
     baseLightRadius: 90,
     maxLightRadius: 1200,
