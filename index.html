@@ -50,7 +50,7 @@ var CANVAS_HEIGHT = 1080;
     TICK BASED TIMER
  */
 var timerMaxVal = 600;
-var timerCurrVal = timerMaxVal;
+var timerCurrVal = timerMaxVal; //Game Over COndition
 var timerTickAmount = 1;
 var timerTickDifference = 100;
 
@@ -233,8 +233,8 @@ var player = {
     width: 32,
     height: 32,
     life: 100,
-    baseLightRadius: 40,
-    lightRadius: 40,
+    baseLightRadius: 90,
+    lightRadius: 90,
     draw: function() {
         //canvas.fillStyle = this.color;
         // canvas.fillRect(this.x, this.y, this.width, this.height);
@@ -290,7 +290,7 @@ var player2 = {
     spriteIndex: 0,
     spriteCooldown: 100,
     spriteLastTickTime: 0,
-    x: 1920 - 60 - 32 - 10,
+    x: 1920 - 120,
     y: 1080 - 60 - 32 - 10,
     velX: 0,
     velY: 0,
@@ -299,8 +299,8 @@ var player2 = {
     width: 32,
     height: 32,
     life: 100,
-    baseLightRadius: 40,
-    lightRadius: 40,
+    baseLightRadius: 90,
+    lightRadius: 90,
     draw: function() {
         //canvas.fillStyle = this.color;
         // canvas.fillRect(this.x, this.y, this.width, this.height);
@@ -466,18 +466,23 @@ function handleCollisions() {
         if(tile.type == "wall"){
 
         if (collides(tile, player)) {
-            //console.log(tile);
+            console.log(tile);
             if(player.velX < 0 ){
-                if(player.x > tile.x){
+                if(player.x > tile.x ){
                 console.log("left stop");
+
+                player.x =  player.x + player.speed;
                 player.velX = 0;
+                
             }
             }
 
             if(player.velX > 0 ){
                 if(player.x < tile.x){
                 console.log("right stop");
+                player.x =  player.x - player.speed;
                 player.velX = 0;
+                
             }
             }
 
@@ -485,6 +490,7 @@ function handleCollisions() {
             if(player.velY < 0 ){
                 if(player.y > tile.y){
                 console.log("up stop");
+                 player.y =  player.y + player.speed;
                 player.velY = 0;
             }
             }
@@ -492,10 +498,11 @@ function handleCollisions() {
             if(player.velY > 0 ){
                   if(player.y < tile.y){
                 console.log("down stop");
+                 player.y =  player.y - player.speed;
                 player.velY = 0;
             }
             }
-            console.log("IM STUCK");
+            console.log("IM STUCK at" + player.x + ',' + player.y);
             //tile.explode();
            // player.lifeChange(-10);
         }
@@ -506,13 +513,15 @@ function handleCollisions() {
             if(player2.velX < 0 ){
                 if(player2.x > tile.x){
                 console.log("left stop");
+                player2.x =  player2.x + player2.speed;
                 player2.velX = 0;
             }
             }
 
-            if(player.velX > 0 ){
+            if(player2.velX > 0 ){
                 if(player2.x < tile.x){
                 console.log("right stop");
+                player2.x =  player2.x - player2.speed;
                 player2.velX = 0;
             }
             }
@@ -521,6 +530,7 @@ function handleCollisions() {
             if(player2.velY < 0 ){
                 if(player2.y > tile.y){
                 console.log("up stop");
+                player2.y =  player2.y + player2.speed;
                 player2.velY = 0;
             }
             }
@@ -528,6 +538,7 @@ function handleCollisions() {
             if(player2.velY > 0 ){
                   if(player2.y < tile.y){
                 console.log("down stop");
+                player2.y =  player2.y - player2.speed;
                 player2.velY = 0;
             }
             }
@@ -799,30 +810,28 @@ function update() { //Updates location and reaction of objects to the canvas
         // Grow shadows independently
         // player1 
         if (keydown["/"]) {
-            player.lightRadius++;
+            player.lightRadius += 4;
 
             // Update the timer
             updateTimer(3);
         }
         else {
             if ( player.lightRadius > player.baseLightRadius ) {
-                player.lightRadius--;
+                player.lightRadius -= 8;
             }
         }
 
         // player2 
         if (keydown.e) {
-            player2.lightRadius++;
+            player2.lightRadius += 4;
 
             updateTimer(3);
         }
         else {
             if ( player2.lightRadius > player2.baseLightRadius ) {
-                player2.lightRadius--;
+                player2.lightRadius -= 8;
             }
         }
-		
-        
     }
 
 
@@ -902,7 +911,7 @@ function draw() { //Draws objects to the canvas
         // Draw the shadow above the background but below the players and UI elements
 
         // Set it to the size of the main canvas
-    /*    shadowCanvas.width = canvasElement.get(0).width;
+        shadowCanvas.width = canvasElement.get(0).width;
         shadowCanvas.height = canvasElement.get(0).height;
         // Fill the mask with black
         shadowCanvasCtx.fillStyle = "black";
@@ -928,7 +937,7 @@ function draw() { //Draws objects to the canvas
 
         // Draw the shadow layer on the canvas
         canvas.drawImage(shadowCanvas, 0, 0);
-*/
+
         player.draw();
 		player2.draw();
 
