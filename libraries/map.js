@@ -36,7 +36,7 @@ function drawMap(canvas) {
             if (parseInt(mapArray[i][j]) == 1) {
 	        var newTile = {
     		// color: "#00A",
-    		tile: Tile("enemy"),
+    		tile: Tile("6060square"),
     		x: j*60,
     		y: i*60,
     		width: 60,
