@@ -75,6 +75,8 @@ var canvas = canvasElement.get(0).getContext("2d");
 canvasElement.appendTo('body');
 var shadowCanvas = document.createElement('canvas');
 var shadowCanvasCtx = shadowCanvas.getContext('2d');
+var timerCanvas = document.createElement('canvas');
+var timerCanvasCtx = timerCanvas.getContext('2d');
 
 function scaleToSmallest() {
     var ratio = CANVAS_WIDTH / CANVAS_HEIGHT;
@@ -921,6 +923,7 @@ function draw() { //Draws objects to the canvas
 
     canvas.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
     shadowCanvasCtx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    timerCanvasCtx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
 
 
@@ -1038,9 +1041,14 @@ function draw() { //Draws objects to the canvas
         canvas.fillStyle = "#F00";*/
         //canvas.fillRect(20, 20, timerMaxVal + timerCurrVal, 10);
 
+        // Set it to the size of the main canvas
+        timerCanvas.width = 330 * (timerCurrVal / timerMaxVal);
+        timerCanvas.height = 51;
+        
         //edit the bar canvas.drawImage(img,sx,sy,swidth,sheight,x,y,width,height);
-        canvas.drawImage(timerBar, 0, 0, 350 ,90, 0  ,0,  timerCurrVal,90);
+        timerCanvasCtx.drawImage(timerBar, 0, 0, 330, 51);
        // canvas.drawImage(imageObj, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
+        canvas.drawImage(timerCanvas, 0, 0);
     
         if(gameTry >= 1){
             canvas.drawImage(dogBone,CANVAS_WIDTH/2 + 560, 0, 120,55);
