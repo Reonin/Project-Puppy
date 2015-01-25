@@ -62,7 +62,7 @@ function updateTimer(accelVal) {
     // If the "tick difference" has passed
     if ( (newDateObj.getTime() - lastTime) >= (timerTickDifference / accelVal) ) {
         timerCurrVal -= timerTickAmount;
-        console.log(timerCurrVal);
+        //console.log(timerCurrVal);
         lastTime = newDateObj.getTime();
     }
 }
@@ -459,6 +459,87 @@ function handleCollisions() {
         console.log("Love at last");
     }
 
+
+    tileArray.forEach(function(tile) {
+
+
+        if(tile.type == "wall"){
+
+        if (collides(tile, player)) {
+            //console.log(tile);
+            if(player.velX < 0 ){
+                if(player.x > tile.x){
+                console.log("left stop");
+                player.velX = 0;
+            }
+            }
+
+            if(player.velX > 0 ){
+                if(player.x < tile.x){
+                console.log("right stop");
+                player.velX = 0;
+            }
+            }
+
+
+            if(player.velY < 0 ){
+                if(player.y > tile.y){
+                console.log("up stop");
+                player.velY = 0;
+            }
+            }
+
+            if(player.velY > 0 ){
+                  if(player.y < tile.y){
+                console.log("down stop");
+                player.velY = 0;
+            }
+            }
+            console.log("IM STUCK");
+            //tile.explode();
+           // player.lifeChange(-10);
+        }
+
+        //Player 2 collides with tile
+        if (collides(tile, player2)) {
+            //console.log(tile);
+            if(player2.velX < 0 ){
+                if(player2.x > tile.x){
+                console.log("left stop");
+                player2.velX = 0;
+            }
+            }
+
+            if(player.velX > 0 ){
+                if(player2.x < tile.x){
+                console.log("right stop");
+                player2.velX = 0;
+            }
+            }
+
+
+            if(player2.velY < 0 ){
+                if(player2.y > tile.y){
+                console.log("up stop");
+                player2.velY = 0;
+            }
+            }
+
+            if(player2.velY > 0 ){
+                  if(player2.y < tile.y){
+                console.log("down stop");
+                player2.velY = 0;
+            }
+            }
+            console.log("Player two is STUCK");
+            //tile.explode();
+           // player.lifeChange(-10);
+        }
+
+}
+
+    });
+
 }
 
 /*** Parrallax background tutorial http://javacoffee.de/?p=866 **/
@@ -640,15 +721,7 @@ function update() { //Updates location and reaction of objects to the canvas
             animateSprite(player);
         }
 
-        player.velX *= player.friction;
-        player.x += player.velX;
-        player.velY *= player.friction;
-        player.y += player.velY;
-
-        player.x = player.x.clamp(0, CANVAS_WIDTH - player.width); //prevents character from going past canvas
-        player.y = player.y.clamp(0, CANVAS_HEIGHT - player.height); //prevents character from going past canvas
-		
-		//Player2 Movement Controls
+       //Player2 Movement Controls
         if (keydown.a) {
             if ( player2.velX > -player2.speed ) {
                 player2.velX--;
@@ -680,6 +753,18 @@ function update() { //Updates location and reaction of objects to the canvas
 
             animateSprite(player2);
         }
+        //Handle Collision
+        handleCollisions();
+
+        player.velX *= player.friction;
+        player.x += player.velX;
+        player.velY *= player.friction;
+        player.y += player.velY;
+
+        player.x = player.x.clamp(0, CANVAS_WIDTH - player.width); //prevents character from going past canvas
+        player.y = player.y.clamp(0, CANVAS_HEIGHT - player.height); //prevents character from going past canvas
+        
+        
 
         player2.velX *= player2.friction;
         player2.x += player2.velX;
@@ -737,8 +822,7 @@ function update() { //Updates location and reaction of objects to the canvas
             }
         }
 		
-        //Handle Collision
-        handleCollisions();
+        
     }
 
 
@@ -814,7 +898,7 @@ function draw() { //Draws objects to the canvas
         // Draw the shadow above the background but below the players and UI elements
 
         // Set it to the size of the main canvas
-        shadowCanvas.width = canvasElement.get(0).width;
+    /*    shadowCanvas.width = canvasElement.get(0).width;
         shadowCanvas.height = canvasElement.get(0).height;
         // Fill the mask with black
         shadowCanvasCtx.fillStyle = "black";
@@ -840,7 +924,7 @@ function draw() { //Draws objects to the canvas
 
         // Draw the shadow layer on the canvas
         canvas.drawImage(shadowCanvas, 0, 0);
-
+*/
         player.draw();
 		player2.draw();
 
