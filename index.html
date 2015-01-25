@@ -155,6 +155,11 @@ function setUpKeys() {
 };
 setUpKeys();
 
+var notyet = 0;    
+function clearTimer() {
+    notyet = 0;   
+}  
+
 function pauseGame() {
     if (notyet == 1) {
         console.log("waiting")
@@ -527,6 +532,7 @@ function handleCollisions() {
     if(collides(player, player2)){
 
         console.log("Love at last");
+        //Add Win condition SOund
     }
 
 
@@ -719,8 +725,8 @@ function onMouseMove(e) {
     mouse_x = evt.result;
     mouse_x = evt.clientX - evt.pageX
     //var rect = canvas.getBoundingClientRect();
-    console.log(evt.clientX - evt.pageX);
-    console.log(evt.clientY);
+    //console.log(evt.clientX - evt.pageX);
+    //console.log(evt.clientY);
         return mouse_x;
           
 
@@ -787,6 +793,7 @@ function update() { //Updates location and reaction of objects to the canvas
 
                     currentState = states.End;
                 }
+                //Trigger Sound for death here
             timerCurrVal = timerMaxVal;
             player.x = P1_STARTX;
             player.y = P1_STARTY;
