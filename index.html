@@ -233,8 +233,8 @@ var player = {
     width: 32,
     height: 32,
     life: 100,
-    baseLightRadius: 40,
-    lightRadius: 40,
+    baseLightRadius: 90,
+    lightRadius: 90,
     draw: function() {
         //canvas.fillStyle = this.color;
         // canvas.fillRect(this.x, this.y, this.width, this.height);
@@ -290,7 +290,7 @@ var player2 = {
     spriteIndex: 0,
     spriteCooldown: 100,
     spriteLastTickTime: 0,
-    x: 1920 - 60 - 32 - 10,
+    x: 1920 - 120,
     y: 1080 - 60 - 32 - 10,
     velX: 0,
     velY: 0,
@@ -299,8 +299,8 @@ var player2 = {
     width: 32,
     height: 32,
     life: 100,
-    baseLightRadius: 40,
-    lightRadius: 40,
+    baseLightRadius: 90,
+    lightRadius: 90,
     draw: function() {
         //canvas.fillStyle = this.color;
         // canvas.fillRect(this.x, this.y, this.width, this.height);
@@ -916,7 +916,7 @@ function draw() { //Draws objects to the canvas
         // Draw the shadow above the background but below the players and UI elements
 
         // Set it to the size of the main canvas
-    /*    shadowCanvas.width = canvasElement.get(0).width;
+        shadowCanvas.width = canvasElement.get(0).width;
         shadowCanvas.height = canvasElement.get(0).height;
         // Fill the mask with black
         shadowCanvasCtx.fillStyle = "black";
@@ -942,7 +942,7 @@ function draw() { //Draws objects to the canvas
 
         // Draw the shadow layer on the canvas
         canvas.drawImage(shadowCanvas, 0, 0);
-*/
+
         player.draw();
 		player2.draw();
 
