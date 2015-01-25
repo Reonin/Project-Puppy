@@ -228,6 +228,9 @@ var win_sound = new Howl({
 var whine_fx = new Howl({
     urls: ['sounds/fx/dogwhine.wav'],
 });
+var bark_fx = new Howl({
+    urls: ['sounds/fx/quickbarks.wav'],
+});
 
 function animateSprite(object) {
     // Sprite walk cycle
@@ -535,7 +538,9 @@ function handleCollisions() {
     if(collides(player, player2)){
 
         console.log("Love at last");
-        //Add Win condition SOund
+		bark_fx.play();
+		win_sound.play();
+        //Add Win condition SOund - DONE
     }
 
 
