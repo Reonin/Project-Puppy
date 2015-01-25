@@ -467,17 +467,24 @@ function handleCollisions() {
 
         if (collides(tile, player)) {
             //console.log(tile);
+            console.log(tile);
             if(player.velX < 0 ){
                 if(player.x > tile.x){
+                if(player.x > tile.x ){
                 console.log("left stop");
+
+                player.x =  player.x + player.speed;
                 player.velX = 0;
+                
             }
             }
 
             if(player.velX > 0 ){
                 if(player.x < tile.x){
                 console.log("right stop");
+                player.x =  player.x - player.speed;
                 player.velX = 0;
+                
             }
             }
 
@@ -485,6 +492,7 @@ function handleCollisions() {
             if(player.velY < 0 ){
                 if(player.y > tile.y){
                 console.log("up stop");
+                 player.y =  player.y + player.speed;
                 player.velY = 0;
             }
             }
@@ -492,10 +500,12 @@ function handleCollisions() {
             if(player.velY > 0 ){
                   if(player.y < tile.y){
                 console.log("down stop");
+                 player.y =  player.y - player.speed;
                 player.velY = 0;
             }
             }
             console.log("IM STUCK");
+            console.log("IM STUCK at" + player.x + ',' + player.y);
             //tile.explode();
            // player.lifeChange(-10);
         }
@@ -506,13 +516,16 @@ function handleCollisions() {
             if(player2.velX < 0 ){
                 if(player2.x > tile.x){
                 console.log("left stop");
+                player2.x =  player2.x + player2.speed;
                 player2.velX = 0;
             }
             }
 
             if(player.velX > 0 ){
+            if(player2.velX > 0 ){
                 if(player2.x < tile.x){
                 console.log("right stop");
+                player2.x =  player2.x - player2.speed;
                 player2.velX = 0;
             }
             }
@@ -521,6 +534,7 @@ function handleCollisions() {
             if(player2.velY < 0 ){
                 if(player2.y > tile.y){
                 console.log("up stop");
+                player2.y =  player2.y + player2.speed;
                 player2.velY = 0;
             }
             }
@@ -528,6 +542,7 @@ function handleCollisions() {
             if(player2.velY > 0 ){
                   if(player2.y < tile.y){
                 console.log("down stop");
+                player2.y =  player2.y - player2.speed;
                 player2.velY = 0;
             }
             }
