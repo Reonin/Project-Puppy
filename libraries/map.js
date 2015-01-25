@@ -17,15 +17,15 @@ function drawMap(canvas) {
             var newTile = {
     		// color: "#00A",
     		tile: Tile("spaceship"),
-    		x: j*28,
-    		y: i*28,
+    		x: j*60,
+    		y: i*60,
     		width:	60,
     		height: 60,
-    		
+    		type: "floor",
     		draw: function() {
         	//canvas.fillStyle = this.color;
         	// canvas.fillRect(this.x, this.y, this.width, this.height);
-        	this.tile.draw(canvas, this.x, this.y);
+        	this.tile.draw(canvas, this.x, this.y, 60, 60);
 	     }
 	   };
 
@@ -37,15 +37,16 @@ function drawMap(canvas) {
 	        var newTile = {
     		// color: "#00A",
     		tile: Tile("enemy"),
-    		x: j*28,
-    		y: i*28,
+    		x: j*60,
+    		y: i*60,
     		width: 60,
     		height: 60,
+            type: "wall",
     
     		draw: function() {
         	//canvas.fillStyle = this.color;
         	// canvas.fillRect(this.x, this.y, this.width, this.height);
-        	this.tile.draw(canvas, this.x, this.y);
+        	this.tile.draw(canvas, this.x, this.y, 60, 60);
     }
 };
 		tileArray.push(newTile);
