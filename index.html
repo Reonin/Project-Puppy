@@ -56,6 +56,9 @@ var timerTickDifference = 100;
 
 var lastTime;
 
+//Life System
+var gameTry = 3;
+
 function updateTimer(accelVal) {
     var newDateObj = new Date();
 
@@ -166,14 +169,33 @@ Number.prototype.clamp = function(min, max) {
     return Math.min(Math.max(this, min), max);
 };
 
+
+var P1_STARTX = 70;
+var P1_STARTY = 70;
+var P2_STARTX = 1920 - 120;
+var P2_STARTY = 1080 - 60 - 32 - 10;
+
 //Text Variables
 var splashTextX = CANVAS_WIDTH / 3;
 var splashTextY = 0;
 var endTextX = CANVAS_WIDTH / 3;
-var endTextY = 0;
+var endTextY = -650;
+
+//GameScreen Declarations
+var splashScreen = new Image();
+splashScreen.src = 'images/opening-screen.png';
+
+var timerBar = new Image();
+timerBar.src = 'images/Bar.png';
+
+var dogBone = new Image();
+dogBone.src = 'images/dog-bone.png';
+
+//End Portraits
+var credImg1 = new Image();
+credImg1.src = 'images/dog-bone.png';
 
 //Sound creation
-
 var verifysound = 0;
 
 var gameloop_sound = new Howl({
@@ -224,8 +246,8 @@ var player = {
     spriteIndex: 0,
     spriteCooldown: 100,
     spriteLastTickTime: 0,
-    x: 70,
-    y: 70,
+    x: P1_STARTX,
+    y: P1_STARTY,
     velX: 0,
     velY: 0,
     speed: 5,
@@ -290,8 +312,8 @@ var player2 = {
     spriteIndex: 0,
     spriteCooldown: 100,
     spriteLastTickTime: 0,
-    x: 1920 - 120,
-    y: 1080 - 60 - 32 - 10,
+    x: P2_STARTX,
+    y: P2_STARTY,
     velX: 0,
     velY: 0,
     speed: 5,
@@ -636,6 +658,25 @@ function onMouseMove(e) {
     //console.log('the mouse is at ' + xm + 'and' + ym);
 }
 
+/*function getMousePos(canvas, evt) {
+        var rect = canvas.getBoundingClientRect();
+        return {
+          x: evt.clientX - rect.left,
+          y: evt.clientY - rect.top
+        };
+      }*/
+      var mouse_x = 0;
+      var mouse_y;
+ $("#GameCanvasScreen").mousemove( function(evt){
+    mouse_x = evt.result;
+    mouse_x = evt.clientX - evt.pageX
+    //var rect = canvas.getBoundingClientRect();
+    console.log(evt.clientX - evt.pageX);
+    console.log(evt.clientY);
+        return mouse_x;
+          
+
+});
 //Draw the Array of maptiles
 
 
@@ -649,6 +690,11 @@ function controller(){
     }
 
 }
+
+
+//image timerbar
+
+
 
 function update() { //Updates location and reaction of objects to the canvas
 
@@ -685,6 +731,22 @@ function update() { //Updates location and reaction of objects to the canvas
 
 
     if (currentState == states.Game) {
+        //Lose a life and reset
+        if(timerCurrVal <= 0){
+
+            gameTry = gameTry - 1;
+                if(gameTry == 0){
+
+                    currentState = states.End;
+                }
+            timerCurrVal = timerMaxVal;
+            player.x = P1_STARTX;
+            player.y = P1_STARTY;
+            player2.x = P2_STARTX;
+            player2.y = P2_STARTY;
+            //resetGradient here
+
+        }
 			
 		if (verifysound == 0)  {
 		gameloop_sound.play();
@@ -786,7 +848,7 @@ function update() { //Updates location and reaction of objects to the canvas
         player2.y = player2.y.clamp(0, CANVAS_HEIGHT - player2.height); //prevents character from going past canvas
 
         
-        /*
+        
         // Grow BOTH shadows on Space
         if (keydown.space) {
             player.lightRadius++;
@@ -805,7 +867,7 @@ function update() { //Updates location and reaction of objects to the canvas
             // Update the timer
             updateTimer(1);
         }
-        */
+        
 
         // Grow shadows independently
         // player1 
@@ -845,9 +907,9 @@ function update() { //Updates location and reaction of objects to the canvas
 	
         endTextY = endTextY + 1;
 
-        if (endTextY >= 400) {
+        if (endTextY >= 700) {
 
-            endTextY = 400;
+            endTextY = 700;
         }
 
     }
@@ -875,8 +937,11 @@ function draw() { //Draws objects to the canvas
 
 
     if (currentState === states.title) {
+        canvas.drawImage(splashScreen, 0,0);
 
-        canvas.fillStyle = "#000"; // Set color to black
+
+
+        /*canvas.fillStyle = "#000"; // Set color to black
         canvas.font = 'bold 40pt Calibri';
         var GAME_NAME_TEXT = "Codename Project Puppy";
         gameTextx = canvas.measureText(GAME_NAME_TEXT).width; //Centers the text based on length
@@ -887,7 +952,7 @@ function draw() { //Draws objects to the canvas
 
         canvas.fillStyle = "00F";
         canvas.fillText(GAME_NAME_TEXT, (CANVAS_WIDTH / 2) - (gameTextx / 2) + 3, CANVAS_HEIGHT / 3);
-
+*/
 
         canvas.fillStyle = "#F00";
         canvas.font = 'bold 20pt Calibri';
@@ -935,6 +1000,17 @@ function draw() { //Draws objects to the canvas
         shadowCanvasCtx.fillStyle = p2Gradient;
         shadowCanvasCtx.fill();
 
+        /*
+
+        mouseGradient = shadowCanvasCtx.createRadialGradient(player2.x + (player2.width / 2), player2.y + (player2.height / 2), 0, player2.x + (player2.width / 2), player2.y + (player2.height / 2), player2.lightRadius);
+        mouseGradient.addColorStop(0,"black");
+        mouseGradient.addColorStop(1,"transparent");
+        shadowCanvasCtx.arc(player2.x + (player2.width / 2), player2.y + (player2.height / 2), player2.lightRadius, 0, 2 * Math.PI);
+        shadowCanvasCtx.fillStyle = mouseGradient;
+        shadowCanvasCtx.fill();
+
+        */
+
         // Draw the shadow layer on the canvas
         canvas.drawImage(shadowCanvas, 0, 0);
 
@@ -953,17 +1029,29 @@ function draw() { //Draws objects to the canvas
 
 
         //Life Bar top is pink static background
-        canvas.strokeRect(20, 20, 100 * 2, 10);
+      /*  canvas.strokeRect(20, 20, 100 * 2, 10);
         canvas.fillStyle = "#8B8989";
-        canvas.fillRect(20, 20, 100 * 2, 10);
+        canvas.fillRect(20, 20, 100 * 2, 10);*/
 
         //Second bar is red dynamic one
-        canvas.strokeRect(20, 20, 100 * 2, 10);
-        canvas.fillStyle = "#F00";
-        canvas.fillRect(20, 20, timerMaxVal + timerCurrVal, 10);
+ /*       canvas.strokeRect(20, 20, 100 * 2, 10);
+        canvas.fillStyle = "#F00";*/
+        //canvas.fillRect(20, 20, timerMaxVal + timerCurrVal, 10);
 
-
-
+        //edit the bar canvas.drawImage(img,sx,sy,swidth,sheight,x,y,width,height);
+        canvas.drawImage(timerBar, 0, 0, 350 ,90, 0  ,0,  timerCurrVal,90);
+       // canvas.drawImage(imageObj, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
+    
+        if(gameTry >= 1){
+            canvas.drawImage(dogBone,CANVAS_WIDTH/2 + 560, 0, 120,55);
+        }
+       
+        if(gameTry >= 2){
+       canvas.drawImage(dogBone,CANVAS_WIDTH/2 + 680,0, 120,55);
+    }
+     if(gameTry >= 3){
+       canvas.drawImage(dogBone,CANVAS_WIDTH/2 +800,0, 120,55);
+   }
 
     }
 
@@ -1015,6 +1103,20 @@ function draw() { //Draws objects to the canvas
         canvas.font = '20pt Calibri';
         endTextX = canvas.measureText("Michael Parker").width;
         canvas.fillText("Michael Parker", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY + 225);
+
+
+
+
+        canvas.drawImage(credImg1,CANVAS_WIDTH/2 - (endTextX / 2) , endTextY + 500, 140,55);
+
+
+        canvas.fillStyle = "#000"; // Set color to black
+        canvas.font = '40pt Calibri';
+        endTextX = canvas.measureText("Credits").width;
+        canvas.fillText("Credits", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY + 635);
+        
+
+
 		
 	}
 
