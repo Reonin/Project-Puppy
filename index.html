@@ -229,6 +229,10 @@ storyScreen2.src = 'images/Story_2.png';
 var controlScreen = new Image();
 controlScreen.src = 'images/Info_Screen.png';
 
+var endScreenGroupshot = new Image();
+endScreenGroupshot.src = 'images/640360.png';
+
+
 
 
 //Sound creation
@@ -1306,54 +1310,58 @@ if(currentState == states.story){
         canvas.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
         canvas.fillStyle = "#F00"; // Set color to red
-        canvas.font = '25pt Calibri';
+        canvas.font = '45pt Calibri';
 
         var GameOVER_TEXT = "What do we do now?";
         endTextX = canvas.measureText(GameOVER_TEXT).width; //Centers the text based on length
         //canvas.fillText(GameOVER_TEXT, (CANVAS_WIDTH/2) - (GameOVER_TEXTx/2) , CANVAS_HEIGHT-CANVAS_HEIGHT/4);
 
-        canvas.fillText(GameOVER_TEXT, (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY - 200);
+        canvas.fillText(GameOVER_TEXT, (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY - 600);
+
+
+       
+        canvas.drawImage(endScreenGroupshot,CANVAS_WIDTH/2 - (endScreenGroupshot.width / 2) , endTextY - 480, 640,360);
 
 
         canvas.fillStyle = "#FFF"; // Set color to black
         canvas.font = '20pt Calibri';
-        endTextX = canvas.measureText("Blake BS").width;
-        canvas.fillText("Blake BS", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY - 45);
+        endTextX = canvas.measureText("Blake BS  - Programming").width;
+        canvas.fillText("Blake BS  - Programming", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY - 45);
 
         canvas.fillStyle = "#FFF"; // Set color to black
         canvas.font = '20pt Calibri';
-        endTextX = canvas.measureText("Gil Chen").width;
-        canvas.fillText("Gil Chen", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY);
+        endTextX = canvas.measureText("Gil Chen - Environment Art and Menu Screens").width;
+        canvas.fillText("Gil Chen - Environment Art and Menu Screens", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY);
 
         canvas.fillStyle = "#FFF"; // Set color to black
         canvas.font = '20pt Calibri';
-        endTextX = canvas.measureText("Ryan Giglio").width;
-        canvas.fillText("Ryan Giglio", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY + 45);
+        endTextX = canvas.measureText("Ryan Giglio - Programming").width;
+        canvas.fillText("Ryan Giglio - Programming", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY + 45);
 
 		canvas.fillStyle = "#FFF"; // Set color to black
         canvas.font = '20pt Calibri';
-        endTextX = canvas.measureText("W.V. James").width;
-		canvas.fillText("W.V. James", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY + 90);
+        endTextX = canvas.measureText("W.V. James - Programming & Hand-holding controller").width;
+		canvas.fillText("W.V. James - Programming & Hand-holding controller", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY + 90);
 
 		canvas.fillStyle = "#FFF"; // Set color to black
         canvas.font = '20pt Calibri';
-        endTextX = canvas.measureText("Corey Jeffers").width;
-        canvas.fillText("Corey Jeffers", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY + 135);
+        endTextX = canvas.measureText("Corey Jeffers - Programming").width;
+        canvas.fillText("Corey Jeffers - Programming", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY + 135);
 
 		canvas.fillStyle = "#FFF"; // Set color to black
         canvas.font = '20pt Calibri';
-        endTextX = canvas.measureText("Pedro Mont").width;
-		canvas.fillText("Pedro Mont", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY + 180);
+        endTextX = canvas.measureText("Pedro Mont - Game Audio").width;
+		canvas.fillText("Pedro Mont - Game Audio", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY + 180);
 
 		canvas.fillStyle = "#FFF"; // Set color to black
         canvas.font = '20pt Calibri';
-        endTextX = canvas.measureText("Michael Parker").width;
-        canvas.fillText("Michael Parker", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY + 225);
+        endTextX = canvas.measureText("Michael Parker - Character Art").width;
+        canvas.fillText("Michael Parker - Character Art", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY + 225);
 
 
 
 
-        canvas.drawImage(credImg1,CANVAS_WIDTH/2 - (endTextX / 2) , endTextY + 500, 140,55);
+        canvas.drawImage(credImg1,CANVAS_WIDTH/2 - 70 , endTextY + 500, 140,55);
 
 
         canvas.fillStyle = "#FFF"; // Set color to black
