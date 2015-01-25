@@ -178,7 +178,6 @@ var verifysound = 0;
 
 var gameloop_sound = new Howl({
     urls: ['sounds/gameplay_song.wav'],
-//	autoplay: true,
     loop: true,
 });
 var menuloop_sound = new Howl({
@@ -690,7 +689,7 @@ function update() { //Updates location and reaction of objects to the canvas
         player2.x = player2.x.clamp(0, CANVAS_WIDTH - player2.width); //prevents character from going past canvas
         player2.y = player2.y.clamp(0, CANVAS_HEIGHT - player2.height); //prevents character from going past canvas
 
-        /*
+        
         // Grow BOTH shadows on Space
         if (keydown.space) {
             player.lightRadius++;
@@ -709,7 +708,6 @@ function update() { //Updates location and reaction of objects to the canvas
             // Update the timer
             updateTimer(1);
         }
-        */
 
         // Grow shadows independently
 

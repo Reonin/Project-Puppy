@@ -17,7 +17,7 @@
     height = height || image.height;
     
     return {
-      draw: function(canvas, x, y) {
+      draw: function(canvas, x, y, width, height) {
         canvas.drawImage(
           image,
           sourceX,
