@@ -466,10 +466,8 @@ function handleCollisions() {
         if(tile.type == "wall"){
 
         if (collides(tile, player)) {
-            //console.log(tile);
             console.log(tile);
             if(player.velX < 0 ){
-                if(player.x > tile.x){
                 if(player.x > tile.x ){
                 console.log("left stop");
 
@@ -504,7 +502,6 @@ function handleCollisions() {
                 player.velY = 0;
             }
             }
-            console.log("IM STUCK");
             console.log("IM STUCK at" + player.x + ',' + player.y);
             //tile.explode();
            // player.lifeChange(-10);
