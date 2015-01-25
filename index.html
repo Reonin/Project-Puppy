@@ -258,7 +258,11 @@ var whine_fx = new Howl({
 var bark_fx = new Howl({
     urls: ['sounds/fx/quickbarks.wav'],
 });
+var story_fx = new Howl({
+    urls: ['sounds/story_fx.mp3'],
+});
 
+varstory_fx = 0; // just for story_fx not looping
 
 function animateSprite(object) {
     // Sprite walk cycle
@@ -1168,7 +1172,12 @@ if(currentState == states.story){
     if(currentState == states.story2){
 
         canvas.drawImage(storyScreen2, 0,0);
-
+		
+		if (varstory_fx == 0)  {
+		story_fx.play();
+		varstory_fx = 1;
+		}
+		
        /* canvas.fillStyle = "#F00";
         canvas.font = 'bold 20pt Calibri';
         var SPACEBAR_TEXT = "Press Space to Continue";
