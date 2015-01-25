@@ -232,6 +232,10 @@ controlScreen.src = 'images/Info_Screen.png';
 var endScreenGroupshot = new Image();
 endScreenGroupshot.src = 'images/640360.png';
 
+var creditback = new Image();
+creditback.src = 'images/credit.png';
+
+
 
 
 
@@ -1309,29 +1313,37 @@ if(currentState == states.story){
         canvas.fillStyle = "#000";
         canvas.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-        canvas.fillStyle = "#F00"; // Set color to red
+        canvas.drawImage(creditback,0 , 0, CANVAS_WIDTH,CANVAS_HEIGHT);
+
+        canvas.fillStyle = "#E066FF"; // Set color to red
         canvas.font = '45pt Calibri';
 
         var GameOVER_TEXT = "What do we do now?";
         endTextX = canvas.measureText(GameOVER_TEXT).width; //Centers the text based on length
         //canvas.fillText(GameOVER_TEXT, (CANVAS_WIDTH/2) - (GameOVER_TEXTx/2) , CANVAS_HEIGHT-CANVAS_HEIGHT/4);
 
-        canvas.fillText(GameOVER_TEXT, (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY - 600);
+        canvas.fillText(GameOVER_TEXT, (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY - 630);
 
 
        
-        canvas.drawImage(endScreenGroupshot,CANVAS_WIDTH/2 - (endScreenGroupshot.width / 2) , endTextY - 480, 640,360);
+        canvas.drawImage(endScreenGroupshot,CANVAS_WIDTH/2 - (endScreenGroupshot.width / 2) , endTextY - 540, 640,360);
 
 
         canvas.fillStyle = "#FFF"; // Set color to black
         canvas.font = '20pt Calibri';
         endTextX = canvas.measureText("Blake BS  - Programming").width;
-        canvas.fillText("Blake BS  - Programming", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY - 45);
+        canvas.fillText("Blake BS  - Programming", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY - 85);
 
         canvas.fillStyle = "#FFF"; // Set color to black
         canvas.font = '20pt Calibri';
         endTextX = canvas.measureText("Gil Chen - Environment Art and Menu Screens").width;
-        canvas.fillText("Gil Chen - Environment Art and Menu Screens", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY);
+        canvas.fillText("Gil Chen - Environment Art and Menu Screens", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY -45);
+
+        canvas.fillStyle = "#FFF"; // Set color to black
+        canvas.font = '20pt Calibri';
+        endTextX = canvas.measureText("Tamir Chen - Music (remote from Berlin!)").width;
+        canvas.fillText("Tamir Chen - Music (remote from Berlin!)", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY);
+        
 
         canvas.fillStyle = "#FFF"; // Set color to black
         canvas.font = '20pt Calibri';
