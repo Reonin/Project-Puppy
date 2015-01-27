@@ -13,8 +13,8 @@
 	<script src="libraries/howler.min.js" type="text/javascript"></script> <!-- Audio, https://github.com/goldfire/howler.js/ -->
 	<script src="libraries/jquery.hotkeys.js" type="text/javascript"></script> <!-- Keyboard mapping, https://github.com/tzuryby/jquery.hotkeys -->
 	<script src="libraries/sprite.js" type="text/javascript"></script> <!-- Sprite Mapping,  -->
-	<script src="libraries/map.js" type="text/javascript"></script> <!-- Sprite Mapping,  -->
-	<script src="libraries/tile.js" type="text/javascript"></script> 
+	<script src="libraries/map.js" type="text/javascript"></script> <!-- Object and Level Mapping,  -->
+	<script src="libraries/tile.js" type="text/javascript"></script> <!-- Tile Mapping,  -->
 
 </head>
 
@@ -66,7 +66,7 @@ function updateTimer(accelVal) {
     var newDateObj = new Date();
 
     // If the "tick difference" has passed
-    if ( (newDateObj.getTime() - lastTime) >= (timerTickDifference / accelVal) ) {
+    if ((newDateObj.getTime() - lastTime) >= (timerTickDifference / accelVal)) {
         timerCurrVal -= timerTickAmount;
         //console.log(timerCurrVal);
         lastTime = newDateObj.getTime();
@@ -81,13 +81,13 @@ var shadowCanvasCtx = shadowCanvas.getContext('2d');
 var timerCanvas = document.createElement('canvas');
 var timerCanvasCtx = timerCanvas.getContext('2d');
 canvas.globalAlpha = 1;
+
 function scaleToSmallest() {
     var ratio = CANVAS_WIDTH / CANVAS_HEIGHT;
 
-    if ( ($(window).width() / ratio) <= $(window).height() ) {
+    if (($(window).width() / ratio) <= $(window).height()) {
         canvasElement.css('width', '100%').css('height', 'auto');
-    }
-    else {
+    } else {
         canvasElement.css('height', '100%').css('width', 'auto');
     }
 }
@@ -107,48 +107,48 @@ var states = {
     Game: 2,
     End: 3,
     story: 4,
-    controls:5,
-    gameOver:6,
+    controls: 5,
+    gameOver: 6,
     story2: 7
 };
-var currentState = states.title;//states.splash;
+var currentState = states.title; //states.splash;
 
 //Game Loop
 //var FPS = 60;
 
 // shim layer with setTimeout fallback
-window.requestAnimFrame = (function(){
-  return  window.requestAnimationFrame       ||
-          window.webkitRequestAnimationFrame ||
-          window.mozRequestAnimationFrame    ||
-          function( callback ){
+window.requestAnimFrame = (function() {
+    return window.requestAnimationFrame ||
+        window.webkitRequestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        function(callback) {
             window.setTimeout(callback, 1000 / 60);
-          };
+        };
 })();
 
-function randomIntFromInterval(min,max)
-{
-    return Math.floor(Math.random()*(max-min+1)+min);
+function randomIntFromInterval(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-var started="false";
+var started = "false";
 $("#GameCanvasScreen").click(relMouseCoords);
-function relMouseCoords(event){
-started="true";
+
+function relMouseCoords(event) {
+    started = "true";
 }
 
 function gameloop() {
     controller();
     if (paused == false) {
-    update();
-    draw();
+        update();
+        draw();
     }
-window.requestAnimFrame(gameloop);
+    window.requestAnimFrame(gameloop);
 }
 
 var paused = false;
 
- window.requestAnimFrame(gameloop);
+window.requestAnimFrame(gameloop);
 
 
 //Keyboard Map
@@ -170,19 +170,20 @@ function setUpKeys() {
 };
 setUpKeys();
 
-var notyet = 0;    
+var notyet = 0;
+
 function clearTimer() {
-    notyet = 0;   
-}  
+    notyet = 0;
+}
 
 function pauseGame() {
     if (notyet == 1) {
         console.log("waiting")
-        return; 
-    }  
-     notyet = 1;
-     paused = !paused;
-     setTimeout('clearTimer()', 500);
+        return;
+    }
+    notyet = 1;
+    paused = !paused;
+    setTimeout('clearTimer()', 500);
 }
 
 //console.log(keydown.esc);
@@ -193,8 +194,8 @@ Number.prototype.clamp = function(min, max) {
     return Math.min(Math.max(this, min), max);
 };
 
-var randomPlayer1 = randomIntFromInterval(0,4);
-var randomPlayer2 = randomIntFromInterval(0,4);
+var randomPlayer1 = randomIntFromInterval(0, 4);
+var randomPlayer2 = randomIntFromInterval(0, 4);
 var P1_STARTX = player1spawns[randomPlayer1].x;
 var P1_STARTY = player1spawns[randomPlayer1].y;
 var P2_STARTX = player2spawns[randomPlayer2].x;
@@ -208,7 +209,7 @@ var endTextY = -650;
 
 //GameScreen Declarations
 var splashScreen = new Image();
-splashScreen.src = 'images/opening-screen.png';
+splashScreen.src = 'images/Opening_Screen.jpg';
 
 var timerBar = new Image();
 timerBar.src = 'images/Bar.png';
@@ -221,20 +222,19 @@ var credImg1 = new Image();
 credImg1.src = 'images/dog-bone.png';
 
 var storyScreen = new Image();
-storyScreen.src = 'images/Story_1.png';
+storyScreen.src = 'images/Story_1.jpg';
 
 var storyScreen2 = new Image();
-storyScreen2.src = 'images/Story_2.png';
+storyScreen2.src = 'images/Story_2.jpg';
 
 var controlScreen = new Image();
-controlScreen.src = 'images/Info_Screen.png';
+controlScreen.src = 'images/Info_Screen.jpg';
 
 var endScreenGroupshot = new Image();
-endScreenGroupshot.src = 'images/640360.png';
+endScreenGroupshot.src = 'images/640360.jpg';
 
 var creditback = new Image();
-creditback.src = 'images/credit.png';
-
+creditback.src = 'images/credit.jpg';
 
 
 
@@ -252,7 +252,7 @@ var menuloop_sound = new Howl({
 });
 var creditloop_sound = new Howl({
     urls: ['sounds/credits_song.mp3'],
-    loop: true,
+    loop: false,
 });
 var lose_sound = new Howl({
     urls: ['sounds/dogs_lose.wav']
@@ -276,18 +276,16 @@ function animateSprite(object) {
     // Sprite walk cycle
     var newDateObj = new Date();
 
-    if ( (newDateObj.getTime() - object.spriteLastTickTime) >= object.spriteCooldown ) {
-        if ( object.spriteIndex < ( object.sprite.frames - 1) ) {
+    if ((newDateObj.getTime() - object.spriteLastTickTime) >= object.spriteCooldown) {
+        if (object.spriteIndex < (object.sprite.frames - 1)) {
             object.spriteIndex++;
-        }
-        else {
+        } else {
             object.spriteIndex = 0;
         }
         object.spriteLastTickTime = newDateObj.getTime();
     }
 }
 
-//explosion_sound.play();
 
 //Create The player
 var player = {
@@ -351,7 +349,7 @@ var player = {
     explode: function() {
         this.active = false;
         explosion_sound.play();
-        GameLoopMusic_sound.fadeOut(0, 2000);
+        gameLoopMusic_sound.fadeOut(0, 2000);
         currentState = states.End;
         // An explosion sound and then end the game
     },
@@ -432,8 +430,9 @@ var player2 = {
     explode: function() {
         this.active = false;
         explosion_sound.play();
-        GameLoopMusic_sound.fadeOut(0, 2000);
+        gameloop_sound.fadeOut(0, 2000);
         currentState = states.End;
+        creditloop_sound.play();
         // An explosion sound and then end the game
     },
     lifeChange: function(change) {
@@ -452,86 +451,7 @@ var player2 = {
 };
 
 
-var playerBullets = [];
 
-function Bullet(I) {
-    I.active = true;
-
-    I.xVelocity = 0;
-    I.yVelocity = -I.speed;
-    I.width = 3;
-    I.height = 3;
-    I.color = "#000";
-
-    I.inBounds = function() {
-        return I.x >= 0 && I.x <= CANVAS_WIDTH &&
-            I.y >= 0 && I.y <= CANVAS_HEIGHT;
-    };
-
-    I.draw = function() {
-        canvas.fillStyle = this.color;
-        canvas.fillRect(this.x, this.y, this.width, this.height);
-    };
-
-    I.update = function() {
-        I.x += I.xVelocity;
-        I.y += I.yVelocity;
-
-        I.active = I.active && I.inBounds();
-    };
-
-    return I;
-}
-
-var enemies = [];
-
-function Enemy(I) {
-    I = I || {};
-
-    I.active = true;
-    I.age = Math.floor(Math.random() * 128);
-
-    I.sprite = Sprite("enemy");
-    // I.color = "#A2B";
-
-    I.x = CANVAS_WIDTH / 4 + Math.random() * CANVAS_WIDTH / 2;
-    I.y = 0;
-    I.xVelocity = 0
-    I.yVelocity = 2;
-
-    I.width = 32;
-    I.height = 32;
-
-    I.inBounds = function() {
-        return I.x >= 0 && I.x <= CANVAS_WIDTH &&
-            I.y >= 0 && I.y <= CANVAS_HEIGHT;
-    };
-
-    I.draw = function() {
-        //canvas.fillStyle = this.color;
-        //canvas.fillRect(this.x, this.y, this.width, this.height);
-        this.sprite.draw(canvas, this.x, this.y);
-    };
-
-    I.explode = function() {
-        this.active = false;
-        explosion_sound.play();
-        // Extra Credit: Add an explosion graphic
-    };
-
-    I.update = function() {
-        I.x += I.xVelocity;
-        I.y += I.yVelocity;
-
-        I.xVelocity = 3 * Math.sin(I.age * Math.PI / 64);
-
-        I.age++;
-
-        I.active = I.active && I.inBounds();
-    };
-
-    return I;
-};
 
 //Collision Detection
 function collides(a, b) {
@@ -545,121 +465,108 @@ function collides(a, b) {
 function handleCollisions() {
 
 
-    /*playerBullets.forEach(function(bullet) {
-        enemies.forEach(function(enemy) {
-            if (collides(bullet, enemy)) {
-                enemy.explode();
-                bullet.active = false;
-            }
-        });
-    });
-
-    enemies.forEach(function(enemy) {
-        if (collides(enemy, player)) {
-            enemy.explode();
-            player.lifeChange(-10);
-        }
-    });*/
-
-    if(collides(player, player2)){
+    if (collides(player, player2)) {
 
         console.log("Love at last");
-		bark_fx.play();
-		win_sound.play();
+        bark_fx.play();
+        win_sound.play();
+        gameloop_sound.fadeOut(0, 2000);
+        creditloop_sound.play();
         //Add Win condition SOund - DONE
 
         currentState = states.End;
+
     }
 
 
     tileArray.forEach(function(tile) {
 
 
-        if(tile.type == "wall"){
+        if (tile.type == "wall") {
 
-        if (collides(tile, player)) {
-            console.log(tile);
-            if(player.velX < 0 ){
-                if(player.x > tile.x ){
-                console.log("left stop");
+            if (collides(tile, player)) {
+               // console.log(tile);
+                if (player.velX < 0) {
+                    if (player.x > tile.x) {
+                       // console.log("left stop");
 
-                player.x =  player.x + player.speed;
-                player.velX = 0;
-                
-            }
+                        player.x = player.x + player.speed;
+                        player.velX = 0;
+
+                    }
+                }
+
+                if (player.velX > 0) {
+                    if (player.x < tile.x) {
+                       // console.log("right stop");
+                        player.x = player.x - player.speed;
+                        player.velX = 0;
+
+                    }
+                }
+
+
+                if (player.velY < 0) {
+                    if (player.y > tile.y) {
+                        //console.log("up stop");
+                        player.y = player.y + player.speed;
+                        player.velY = 0;
+                    }
+                }
+
+                if (player.velY > 0) {
+                    if (player.y < tile.y) {
+                       // console.log("down stop");
+                        player.y = player.y - player.speed;
+                        player.velY = 0;
+                    }
+                }
+                //console.log("IM STUCK at" + player.x + ',' + player.y);
+                //tile.explode();
+                // player.lifeChange(-10);
             }
 
-            if(player.velX > 0 ){
-                if(player.x < tile.x){
-                console.log("right stop");
-                player.x =  player.x - player.speed;
-                player.velX = 0;
-                
-            }
-            }
+            //Player 2 collides with tile
+            if (collides(tile, player2)) {
+                //console.log(tile);
+                if (player2.velX < 0) {
+                    if (player2.x > tile.x) {
+                       // console.log("left stop");
+                        player2.x = player2.x + player2.speed;
+                        player2.velX = 0;
+                    }
+                }
+
+                if (player2.velX > 0) {
+                    if (player2.x < tile.x) {
+                       // console.log("right stop");
+                        player2.x = player2.x - player2.speed;
+                        player2.velX = 0;
+                    }
+                }
 
 
-            if(player.velY < 0 ){
-                if(player.y > tile.y){
-                console.log("up stop");
-                 player.y =  player.y + player.speed;
-                player.velY = 0;
-            }
+                if (player2.velY < 0) {
+                    if (player2.y > tile.y) {
+                       // console.log("up stop");
+                        player2.y = player2.y + player2.speed;
+                        player2.velY = 0;
+                    }
+                }
+
+                if (player2.velY > 0) {
+                    if (player2.y < tile.y) {
+                       // console.log("down stop");
+                        player2.y = player2.y - player2.speed;
+                        player2.velY = 0;
+                    }
+                }
+               // console.log("Player two is STUCK");
+                //tile.explode();
+                // player.lifeChange(-10);
             }
 
-            if(player.velY > 0 ){
-                  if(player.y < tile.y){
-                console.log("down stop");
-                 player.y =  player.y - player.speed;
-                player.velY = 0;
-            }
-            }
-            console.log("IM STUCK at" + player.x + ',' + player.y);
-            //tile.explode();
-           // player.lifeChange(-10);
         }
-
-        //Player 2 collides with tile
-        if (collides(tile, player2)) {
-            //console.log(tile);
-            if(player2.velX < 0 ){
-                if(player2.x > tile.x){
-                console.log("left stop");
-                player2.x =  player2.x + player2.speed;
-                player2.velX = 0;
-            }
-            }
-
-            if(player2.velX > 0 ){
-                if(player2.x < tile.x){
-                console.log("right stop");
-                player2.x =  player2.x - player2.speed;
-                player2.velX = 0;
-            }
-            }
-
-
-            if(player2.velY < 0 ){
-                if(player2.y > tile.y){
-                console.log("up stop");
-                player2.y =  player2.y + player2.speed;
-                player2.velY = 0;
-            }
-            }
-
-            if(player2.velY > 0 ){
-                  if(player2.y < tile.y){
-                console.log("down stop");
-                player2.y =  player2.y - player2.speed;
-                player2.velY = 0;
-            }
-            }
-            console.log("Player two is STUCK");
-            //tile.explode();
-           // player.lifeChange(-10);
-        }
-
-}
 
     });
 
@@ -720,28 +627,24 @@ function ParallaxScrolling(canvas, imgdata) {
     }
 }
 
-var layer = new Array('images/first-level.png' ,'images/puppy_love_fog.png');
+var layer = new Array('images/first-level.jpg', 'images/puppy_love_fog.png');
 var parallax = new ParallaxScrolling(canvas, layer);
 
-var text = null;
-var spot = null;
-var box = null;
-var boxProperty = '';
 
-function fadeOut(){
+function fadeOut() {
 
-console.log("Triggers fade");
+   // console.log("Triggers fade");
 
 
-var fading = setInterval(function(){
-    console.log("fading ");
-    canvas.globalAlpha = canvas.globalAlpha - 0.2;
-    console.log(canvas.globalAlpha);
-    if( canvas.globalAlpha <= 0.1){
+    var fading = setInterval(function() {
+       // console.log("fading ");
+        canvas.globalAlpha = canvas.globalAlpha - 0.2;
+       // console.log(canvas.globalAlpha);
+        if (canvas.globalAlpha <= 0.1) {
 
-        clearInterval(fading);
-    }
-}, 1000)
+            clearInterval(fading);
+        }
+    }, 1000)
 
 
 }
@@ -750,16 +653,16 @@ function onMouseMove(e) {
     if (typeof e === 'undefined' || typeof e.clientX === 'undefined') {
         return;
     }
-    
+
     var xm = (e.clientX - Math.floor(window.innerWidth / 2)) * 0.4;
     var ym = (e.clientY - Math.floor(window.innerHeight / 3)) * 0.4;
-    var d = Math.round(Math.sqrt(xm*xm + ym*ym) / 5);
+    var d = Math.round(Math.sqrt(xm * xm + ym * ym) / 5);
     //text.style.textShadow = -xm + 'px ' + -ym + 'px ' + (d + 10) + 'px black';
-    
+
     if (boxProperty) {
         box.style[boxProperty] = '0 ' + -ym + 'px ' + (d + 30) + 'px black';
     }
-    
+
     xm = e.clientX - Math.floor(window.innerWidth / 2);
     ym = e.clientY - Math.floor(window.innerHeight / 2);
     spot.style.backgroundPosition = xm + 'px ' + ym + 'px';
@@ -773,22 +676,22 @@ function onMouseMove(e) {
           y: evt.clientY - rect.top
         };
       }*/
-      var mouse_x = 0;
-      var mouse_y;
- $("#GameCanvasScreen").mousemove( function(evt){
+var mouse_x = 0;
+var mouse_y;
+$("#GameCanvasScreen").mousemove(function(evt) {
     mouse_x = evt.clientX - evt.pageX
-    //var rect = canvas.getBoundingClientRect();
-    //console.log(evt.clientX - evt.pageX);
-    //console.log(evt.clientY);
-        return mouse_x;
-          
+        //var rect = canvas.getBoundingClientRect();
+        //console.log(evt.clientX - evt.pageX);
+        //console.log(evt.clientY);
+    return mouse_x;
+
 
 });
 //Draw the Array of maptiles
 
 
-function controller(){
-     //Pause the game
+function controller() {
+    //Pause the game
     if (keydown.p) {
 
         pauseGame();
@@ -821,20 +724,27 @@ function update() { //Updates location and reaction of objects to the canvas
 
 
     if (currentState === states.title) {
-		
-		if (verifysound == 0)  {
-		menuloop_sound.play();
-		volume:0.7
-		verifysound = 1;
-		}
-		
-		if (keydown.space) {
 
-            setTimeout(function(){ currentState = states.story;
-           // verifysound = 0;
-           // menuloop_sound.stop();
-        }, 200 );
-           
+        if (verifysound == 0) {
+            menuloop_sound.play();
+            volume: 0.7
+            verifysound = 1;
+        }
+
+        if (started == "true") {
+            started = "false";
+            currentState = states.story;
+        }
+
+        if (keydown.space) {
+
+            setTimeout(function() {
+                currentState = states.story;
+
+                // verifysound = 0;
+                // menuloop_sound.stop();
+            }, 200);
+
 
 
         }
@@ -842,15 +752,19 @@ function update() { //Updates location and reaction of objects to the canvas
 
     }
 
-    if(currentState == states.story){
-
-        //Wrap this in a timer to prevent them from skipping 
-        if (keydown.space) {
-            setTimeout(function(){
+    if (currentState == states.story) {
+        if (started == "true") {
+            started = "false";
             currentState = states.story2;
-            //verifysound = 0;
-            //menuloop_sound.stop();
-              }, 200 )
+
+        }
+        //Wrap this in a timer to prevent them from skipping 
+        if (keydown.space) {
+            setTimeout(function() {
+                currentState = states.story2;
+                //verifysound = 0;
+                //menuloop_sound.stop();
+            }, 200)
         }
         //load up the image
         //play music
@@ -858,27 +772,37 @@ function update() { //Updates location and reaction of objects to the canvas
     }
 
 
-if(currentState == states.story2){
+    if (currentState == states.story2) {
+
+        if (started == "true") {
+            started = "false";
+            currentState = states.controls;
+
+        }
 
         //Wrap this in a timer to prevent them from skipping 
         if (keydown.space) {
-            setTimeout(function(){
-            currentState = states.controls;
-            verifysound = 0;
-            menuloop_sound.stop();
-              }, 200 )
+            setTimeout(function() {
+                currentState = states.controls;
+                verifysound = 0;
+                menuloop_sound.stop();
+            }, 200)
         }
         //load up the image
         //play music
         //allow space bar to shift to controls screen
     }
 
-     if(currentState == states.controls){
+    if (currentState == states.controls) {
+        if (started == "true") {
+            started = "false";
+            currentState = states.Game;
 
+        }
         if (keydown.space) {
             currentState = states.Game;
-           verifysound = 0;
-           menuloop_sound.stop();
+            verifysound = 0;
+            menuloop_sound.stop();
         }
 
         //load up the image
@@ -889,27 +813,27 @@ if(currentState == states.story2){
 
     if (currentState == states.Game) {
         //Lose a life and reset
-        if(timerCurrVal <= 0){
+        if (timerCurrVal <= 0) {
 
             gameTry = gameTry - 1;
-                if(gameTry == 0){
+            if (gameTry == 0) {
 
 
-                    fadeOut();
+                fadeOut();
 
-                    setTimeout(function(){
+                setTimeout(function() {
 
-                        currentState = states.End;
-						lose_sound.play();
+                    currentState = states.End;
+                    lose_sound.play();
 
-                     }, 3000)
-                    
+                }, 3000)
 
 
-                }
-                
-				whine_fx.play();
-				//Trigger Sound for death here - DONE
+
+            }
+
+            whine_fx.play();
+            //Trigger Sound for death here - DONE
             timerCurrVal = timerMaxVal;
             player.x = P1_STARTX;
             player.y = P1_STARTY;
@@ -920,23 +844,23 @@ if(currentState == states.story2){
             //resetGradient here
 
         }
-			
-		if (verifysound == 0)  {
-		gameloop_sound.play();
-		verifysound = 1;
-		}
 
-		// Init timer
-        if ( !lastTime ) {
+        if (verifysound == 0) {
+            gameloop_sound.play();
+            verifysound = 1;
+        }
+
+        // Init timer
+        if (!lastTime) {
             var newDateObj = new Date();
             lastTime = newDateObj.getTime();
-			
-			
+
+
         }
 
         //Player Movement Controls
         if (keydown.left) {
-            if ( player.velX > -player.speed ) {
+            if (player.velX > -player.speed) {
                 player.velX--;
             }
 
@@ -945,16 +869,16 @@ if(currentState == states.story2){
         }
 
         if (keydown.right) {
-            if ( player.velX < player.speed ) {
+            if (player.velX < player.speed) {
                 player.velX++;
             }
 
             player.spriteDir = "right";
             animateSprite(player);
         }
-		
-		if (keydown.up) {
-            if ( player.velY > -player.speed ) {
+
+        if (keydown.up) {
+            if (player.velY > -player.speed) {
                 player.velY--;
             }
 
@@ -963,7 +887,7 @@ if(currentState == states.story2){
         }
 
         if (keydown.down) {
-            if ( player.velY < player.speed ) {
+            if (player.velY < player.speed) {
                 player.velY++;
             }
 
@@ -971,9 +895,9 @@ if(currentState == states.story2){
             animateSprite(player);
         }
 
-       //Player2 Movement Controls
+        //Player2 Movement Controls
         if (keydown.a) {
-            if ( player2.velX > -player2.speed ) {
+            if (player2.velX > -player2.speed) {
                 player2.velX--;
             }
 
@@ -982,16 +906,16 @@ if(currentState == states.story2){
         }
 
         if (keydown.d) {
-            if ( player2.velX < player2.speed ) {
+            if (player2.velX < player2.speed) {
                 player2.velX++;
             }
 
             player2.spriteDir = "right";
             animateSprite(player2);
         }
-		
-		if (keydown.w) {
-            if ( player2.velY > -player2.speed ) {
+
+        if (keydown.w) {
+            if (player2.velY > -player2.speed) {
                 player2.velY--;
             }
 
@@ -1000,7 +924,7 @@ if(currentState == states.story2){
         }
 
         if (keydown.s) {
-            if ( player2.velY < player2.speed ) {
+            if (player2.velY < player2.speed) {
                 player2.velY++;
             }
 
@@ -1017,8 +941,8 @@ if(currentState == states.story2){
 
         player.x = player.x.clamp(0, CANVAS_WIDTH - player.width); //prevents character from going past canvas
         player.y = player.y.clamp(0, CANVAS_HEIGHT - player.height); //prevents character from going past canvas
-        
-        
+
+
 
         player2.velX *= player2.friction;
         player2.x += player2.velX;
@@ -1028,22 +952,21 @@ if(currentState == states.story2){
         player2.x = player2.x.clamp(0, CANVAS_WIDTH - player2.width); //prevents character from going past canvas
         player2.y = player2.y.clamp(0, CANVAS_HEIGHT - player2.height); //prevents character from going past canvas
 
-        var timerAccel= 1;
-        
+        var timerAccel = 1;
+
         // Grow BOTH shadows on Space
         if (keydown.space) {
-            if (player.lightRadius < player.maxLightRadius ) {
+            if (player.lightRadius < player.maxLightRadius) {
                 player.lightRadius *= lightGrowRatio;
                 player2.lightRadius *= lightGrowRatio;
             }
-            
+
             timerAccel += (lightOnTimerAccel * 2);
-        }
-        else {
-            if ( player.lightRadius > player.baseLightRadius ) {
+        } else {
+            if (player.lightRadius > player.baseLightRadius) {
                 player.lightRadius *= lightDecayRatio;
             }
-            if ( player2.lightRadius > player2.baseLightRadius ) {
+            if (player2.lightRadius > player2.baseLightRadius) {
                 player2.lightRadius *= lightDecayRatio;
             }
             // Update the timer
@@ -1083,11 +1006,11 @@ if(currentState == states.story2){
 
     if (currentState === states.End) {
 
-		if (verifysound == 0)  {
-		creditloop_sound.play(); // check if needs to be stopped when going back to game / title state
-		verifysound = 1;
-		}
-	
+        if (verifysound == 0) {
+            creditloop_sound.play(); // check if needs to be stopped when going back to game / title state
+            verifysound = 1;
+        }
+
         endTextY = endTextY + 1;
 
         if (endTextY >= 700) {
@@ -1121,11 +1044,8 @@ function draw() { //Draws objects to the canvas
 
 
     if (currentState === states.title) {
-        canvas.drawImage(splashScreen, 0,0);
-	if(started=="true"){
-           
-                currentState = states.story;
-        }
+        canvas.drawImage(splashScreen, 0, 0);
+
 
 
         /*canvas.fillStyle = "#000"; // Set color to black
@@ -1141,18 +1061,18 @@ function draw() { //Draws objects to the canvas
         canvas.fillText(GAME_NAME_TEXT, (CANVAS_WIDTH / 2) - (gameTextx / 2) + 3, CANVAS_HEIGHT / 3);
 */
 
-        
+
 
 
     }
 
 
 
-if(currentState == states.story){
+    if (currentState == states.story) {
 
-        canvas.drawImage(storyScreen, 0,0);
+        canvas.drawImage(storyScreen, 0, 0);
 
-       /* canvas.fillStyle = "#F00";
+        /* canvas.fillStyle = "#F00";
         canvas.font = 'bold 20pt Calibri';
         var SPACEBAR_TEXT = "Press Space to Continue";
         spaceBarTextx = canvas.measureText(SPACEBAR_TEXT).width; //Centers the text based on length
@@ -1162,16 +1082,16 @@ if(currentState == states.story){
     }
 
 
-    if(currentState == states.story2){
+    if (currentState == states.story2) {
 
-        canvas.drawImage(storyScreen2, 0,0);
-		
-		if (varstory_fx == 0)  {
-		story_fx.play();
-		varstory_fx = 1;
-		}
-		
-       /* canvas.fillStyle = "#F00";
+        canvas.drawImage(storyScreen2, 0, 0);
+
+        if (varstory_fx == 0) {
+            story_fx.play();
+            varstory_fx = 1;
+        }
+
+        /* canvas.fillStyle = "#F00";
         canvas.font = 'bold 20pt Calibri';
         var SPACEBAR_TEXT = "Press Space to Continue";
         spaceBarTextx = canvas.measureText(SPACEBAR_TEXT).width; //Centers the text based on length
@@ -1182,14 +1102,13 @@ if(currentState == states.story){
 
 
 
-     if(currentState == states.controls){
+    if (currentState == states.controls) {
 
-      canvas.drawImage(controlScreen, 0,0);
+        canvas.drawImage(controlScreen, 0, 0);
 
-        
+
 
     }
-
 
 
 
@@ -1199,7 +1118,7 @@ if(currentState == states.story){
 
         //Tile draw
 
-        tileArray.forEach(function(tile){
+        tileArray.forEach(function(tile) {
             tile.draw();
         });
 
@@ -1217,15 +1136,15 @@ if(currentState == states.story){
 
         // Draw the light radius around the player
         p1Gradient = shadowCanvasCtx.createRadialGradient(player.x + (player.width / 2), player.y + (player.height / 2), 0, player.x + (player.width / 2), player.y + (player.height / 2), player.lightRadius);
-        p1Gradient.addColorStop(0,"black");
-        p1Gradient.addColorStop(1,"transparent");
+        p1Gradient.addColorStop(0, "black");
+        p1Gradient.addColorStop(1, "transparent");
         shadowCanvasCtx.arc(player.x + (player.width / 2), player.y + (player.height / 2), player.lightRadius, 0, 2 * Math.PI);
         shadowCanvasCtx.fillStyle = p1Gradient;
         shadowCanvasCtx.fill();
 
         p2Gradient = shadowCanvasCtx.createRadialGradient(player2.x + (player2.width / 2), player2.y + (player2.height / 2), 0, player2.x + (player2.width / 2), player2.y + (player2.height / 2), player2.lightRadius);
-        p2Gradient.addColorStop(0,"black");
-        p2Gradient.addColorStop(1,"transparent");
+        p2Gradient.addColorStop(0, "black");
+        p2Gradient.addColorStop(1, "transparent");
         shadowCanvasCtx.arc(player2.x + (player2.width / 2), player2.y + (player2.height / 2), player2.lightRadius, 0, 2 * Math.PI);
         shadowCanvasCtx.fillStyle = p2Gradient;
         shadowCanvasCtx.fill();
@@ -1245,62 +1164,52 @@ if(currentState == states.story){
         canvas.drawImage(shadowCanvas, 0, 0);
 
         player.draw();
-		player2.draw();
-
-    /*    playerBullets.forEach(function(bullet) {
-            bullet.draw();
-        });
-*/
-
-        //Enemy Draw
-       /* enemies.forEach(function(enemy) {
-            enemy.draw();
-        });*/
+        player2.draw();
 
 
         //Life Bar top is pink static background
-      /*  canvas.strokeRect(20, 20, 100 * 2, 10);
-        canvas.fillStyle = "#8B8989";
-        canvas.fillRect(20, 20, 100 * 2, 10);*/
+        /*  canvas.strokeRect(20, 20, 100 * 2, 10);
+          canvas.fillStyle = "#8B8989";
+          canvas.fillRect(20, 20, 100 * 2, 10);*/
 
         //Second bar is red dynamic one
- /*       canvas.strokeRect(20, 20, 100 * 2, 10);
-        canvas.fillStyle = "#F00";*/
+        /*       canvas.strokeRect(20, 20, 100 * 2, 10);
+               canvas.fillStyle = "#F00";*/
         //canvas.fillRect(20, 20, timerMaxVal + timerCurrVal, 10);
 
         // Set it to the size of the main canvas
         timerCanvas.width = 330 * (timerCurrVal / timerMaxVal);
         timerCanvas.height = 51;
-        
+
         //edit the bar canvas.drawImage(img,sx,sy,swidth,sheight,x,y,width,height);
         timerCanvasCtx.drawImage(timerBar, 0, 0, 330, 51);
-       // canvas.drawImage(imageObj, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
+        // canvas.drawImage(imageObj, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
         canvas.drawImage(timerCanvas, 10, 10);
-    
-        if(gameTry >= 1){
-            canvas.drawImage(heart_icon,CANVAS_WIDTH/2 + 720, 15, 70,55);
+
+        if (gameTry >= 1) {
+            canvas.drawImage(heart_icon, CANVAS_WIDTH / 2 + 720, 15, 70, 55);
         }
-       
-        if(gameTry >= 2){
-       canvas.drawImage(heart_icon,CANVAS_WIDTH/2 + 780,15, 70,55);
-    }
-     if(gameTry >= 3){
-       canvas.drawImage(heart_icon,CANVAS_WIDTH/2 +840,15, 70,55);
-   }
 
-    if(gameTry == 0){
+        if (gameTry >= 2) {
+            canvas.drawImage(heart_icon, CANVAS_WIDTH / 2 + 780, 15, 70, 55);
+        }
+        if (gameTry >= 3) {
+            canvas.drawImage(heart_icon, CANVAS_WIDTH / 2 + 840, 15, 70, 55);
+        }
 
-        canvas.fillStyle = "#000";
-        canvas.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+        if (gameTry == 0) {
 
-        canvas.fillStyle = "#F00"; // Set color to red
-        canvas.font = '60pt Calibri';
+            canvas.fillStyle = "#000";
+            canvas.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-        var GameOVER_TEXT = "Game Over";
-        endTextX = canvas.measureText(GameOVER_TEXT).width; 
+            canvas.fillStyle = "#F00"; // Set color to red
+            canvas.font = '60pt Calibri';
 
-        canvas.fillText(GameOVER_TEXT, (CANVAS_WIDTH / 2) ,  CANVAS_HEIGHT/2);
-    }
+            var GameOVER_TEXT = "Game Over";
+            endTextX = canvas.measureText(GameOVER_TEXT).width;
+
+            canvas.fillText(GameOVER_TEXT, (CANVAS_WIDTH / 2), CANVAS_HEIGHT / 2);
+        }
 
 
     }
@@ -1313,7 +1222,7 @@ if(currentState == states.story){
         canvas.fillStyle = "#000";
         canvas.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-        canvas.drawImage(creditback,0 , 0, CANVAS_WIDTH,CANVAS_HEIGHT);
+        canvas.drawImage(creditback, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
         canvas.fillStyle = "#E066FF"; // Set color to red
         canvas.font = '45pt Calibri';
@@ -1325,8 +1234,8 @@ if(currentState == states.story){
         canvas.fillText(GameOVER_TEXT, (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY - 630);
 
 
-       
-        canvas.drawImage(endScreenGroupshot,CANVAS_WIDTH/2 - (endScreenGroupshot.width / 2) , endTextY - 540, 640,360);
+
+        canvas.drawImage(endScreenGroupshot, CANVAS_WIDTH / 2 - (endScreenGroupshot.width / 2), endTextY - 540, 640, 360);
 
 
         canvas.fillStyle = "#FFF"; // Set color to black
@@ -1337,35 +1246,35 @@ if(currentState == states.story){
         canvas.fillStyle = "#FFF"; // Set color to black
         canvas.font = '20pt Calibri';
         endTextX = canvas.measureText("Gil Chen - Environment Art and Menu Screens").width;
-        canvas.fillText("Gil Chen - Environment Art and Menu Screens", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY -45);
+        canvas.fillText("Gil Chen - Environment Art and Menu Screens", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY - 45);
 
         canvas.fillStyle = "#FFF"; // Set color to black
         canvas.font = '20pt Calibri';
         endTextX = canvas.measureText("Tamir Chen - Music (remote from Berlin!)").width;
         canvas.fillText("Tamir Chen - Music (remote from Berlin!)", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY);
-        
+
 
         canvas.fillStyle = "#FFF"; // Set color to black
         canvas.font = '20pt Calibri';
         endTextX = canvas.measureText("Ryan Giglio - Programming").width;
         canvas.fillText("Ryan Giglio - Programming", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY + 45);
 
-		canvas.fillStyle = "#FFF"; // Set color to black
+        canvas.fillStyle = "#FFF"; // Set color to black
         canvas.font = '20pt Calibri';
         endTextX = canvas.measureText("W.V. James - Programming & Hand-holding controller").width;
-		canvas.fillText("W.V. James - Programming & Hand-holding controller", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY + 90);
+        canvas.fillText("W.V. James - Programming & Hand-holding controller", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY + 90);
 
-		canvas.fillStyle = "#FFF"; // Set color to black
+        canvas.fillStyle = "#FFF"; // Set color to black
         canvas.font = '20pt Calibri';
         endTextX = canvas.measureText("Corey Jeffers - Programming").width;
         canvas.fillText("Corey Jeffers - Programming", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY + 135);
 
-		canvas.fillStyle = "#FFF"; // Set color to black
+        canvas.fillStyle = "#FFF"; // Set color to black
         canvas.font = '20pt Calibri';
         endTextX = canvas.measureText("Pedro Mont - Game Audio").width;
-		canvas.fillText("Pedro Mont - Game Audio", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY + 180);
+        canvas.fillText("Pedro Mont - Game Audio", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY + 180);
 
-		canvas.fillStyle = "#FFF"; // Set color to black
+        canvas.fillStyle = "#FFF"; // Set color to black
         canvas.font = '20pt Calibri';
         endTextX = canvas.measureText("Michael Parker - Character Art").width;
         canvas.fillText("Michael Parker - Character Art", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY + 225);
@@ -1373,18 +1282,18 @@ if(currentState == states.story){
 
 
 
-        canvas.drawImage(credImg1,CANVAS_WIDTH/2 - 70 , endTextY + 500, 140,55);
+        canvas.drawImage(credImg1, CANVAS_WIDTH / 2 - 70, endTextY + 500, 140, 55);
 
 
         canvas.fillStyle = "#FFF"; // Set color to black
         canvas.font = '40pt Calibri';
         endTextX = canvas.measureText("Credits").width;
         canvas.fillText("Credits", (CANVAS_WIDTH / 2) - (endTextX / 2), endTextY + 635);
-        
 
 
-		
-	}
+
+
+    }
 
 
 }
